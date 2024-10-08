@@ -35,6 +35,7 @@ const ChatSidebar = () => {
 
   const handleDeleteChannel = (channelId) => {
     dispatch(deleteChannel(channelId));
+
   };
 
   if (isLoading) return <div>Loading channels...</div>;
@@ -65,8 +66,7 @@ const ChatSidebar = () => {
               variant={channel.id === currentChatId ? 'secondary' : ''}
               className="w-100 rounded-0 text-start d-flex justify-content-between"
             >
-              <span className="me-1">#</span>
-              {channel.name}
+              <span className="me-1"># {channel.name}</span>
               {channel.removable && (
                 <span
                   className="flex-grow-0 dropdown-toggle dropdown-toggle-split btn black"

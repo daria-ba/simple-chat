@@ -17,7 +17,6 @@ const ChatMessages = () => {
 
   const channel = channels?.find(({ id }) => id === currentChatId);
   const filteredMessages = messages?.filter((message) => message.channelId === currentChatId);
-  // не понимаю, как добавить в отправляемое сообщение id канала, на котором оно создается 
 
   return (
 <>
