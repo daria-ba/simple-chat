@@ -15,6 +15,8 @@ const socket = (store) => {
 
   socket.on('newChannel', (payload) => {
     // console.log(payload);
+    //store.dispatch(addChannel(newChannel));
+    
     console.log('Получено событие newChannel:', payload);
   });
 

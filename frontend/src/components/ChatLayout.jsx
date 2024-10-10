@@ -6,25 +6,22 @@ import ChatMessages from './chat/ChatMessages';
 const ChatLayout = () => {
 
   return (
-    <div className="h-100">
-      <div className='d-flex flex-column h-100'>
+    <div className="vh-100 bg-light">
+      <div className="h-100 d-flex flex-column">
       <ChatNavbar />
-      <Container className="vh-100 rounded shadow">
-        <Row className="h-100 bg-white flex-md-row">
-          <Col md={2} className="h-100 border-end px-0 bg-light flex-column d-flex">
+
+      <Container className="h-100 my-4 overflow-hidden rounded shadow">
+      <Row className="h-100 bg-white flex-md-row">
+          <Col xs={4} md={2} className="p-0">
             <ChatSidebar/>
           </Col>
-          <Col className="p-0 h-100 overflow-hidden">
-            <div className="d-flex flex-column h-100">
-            <div className="flex-grow-1 overflow-auto"> 
+          <Col className="p-0 h-100">
               <ChatMessages />
-              </div>
-            </div>
-          </Col>
-        </Row>
-      </Container>
+              </Col>
+          </Row>
+        </Container>
       </div>
-    </div>
+      </div>
   );
 };
 

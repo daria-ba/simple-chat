@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { Formik, Field, Form as FormikForm } from "formik";
 import { Button, Form, Container, Card, Navbar, Row, Col } from 'react-bootstrap';
-// import { useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
-// import axios from 'axios';
 import { loginUser } from '../api/api.js';
-// import handleLogin from '../api/routes.js';
+import ChatNavbar from './chat/ChatNavbar.jsx';
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -22,7 +20,6 @@ const LoginForm = () => {
         username: values.username,
         password: values.password,
       });
-      // console.log(response);
       localStorage.setItem('user', JSON.stringify(response))
       navigate('/');
       } catch (error) {
@@ -30,22 +27,11 @@ const LoginForm = () => {
       } finally {
         // setSubmitting(false);
       }
-    // finally {
-    //   setSubmitting(false);
-    // }
   };
 
   return (
     <div className="d-flex flex-column h-100 bg-light">
-      {/* Navbar */}
-      <Navbar bg="white" expand="lg" className="shadow-sm">
-        <Container>
-          <Navbar.Brand as={Link} to="/">
-            Chat
-          </Navbar.Brand>
-        </Container>
-      </Navbar>
-
+      <ChatNavbar />
       <Container fluid className="h-100, vh-100">
         <Row className="justify-content-center align-content-center h-100">
           <Col xs={12} md={8} xxl={6}>

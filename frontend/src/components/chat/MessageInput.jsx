@@ -43,7 +43,7 @@ const MessageInput = () => {
   }, [currentChatId]);
 
   return (
-    <div className="mt-auto px-5 pt-3 pb-5">
+    <div className="mt-auto px-5 py-3">
       <Form className="p-0 rounded-3 border" noValidate onSubmit={formik.handleSubmit}>
         <InputGroup>
           <Form.Control

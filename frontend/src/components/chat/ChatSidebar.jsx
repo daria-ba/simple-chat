@@ -1,13 +1,18 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchChannels, addChannel, updateChannel, deleteChannel, setActiveChannel } from '../../store/slices/chatSlice';
 import React, { useEffect, useState } from 'react';
-import { Button, Dropdown, Nav } from 'react-bootstrap';
+import { Button, Dropdown, Modal } from 'react-bootstrap';
 import AddChannelModal from './AddChannelModal';
+import { toast } from 'react-toastify';
+import {useNavigate} from 'react-router-dom'
 
 const ChatSidebar = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [showDropdown, setShowDropdown] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [channelToDelete, setChannelToDelete] = useState(null);
   const { channels, isLoading, error, currentChatId } = useSelector((state) => state.channels);
 
   useEffect(() => {
@@ -33,22 +38,48 @@ const ChatSidebar = () => {
     setShowDropdown(showDropdown === channelId ? null : channelId);
   };
 
-  const handleDeleteChannel = (channelId) => {
-    dispatch(deleteChannel(channelId));
+  const deleteNotify = () => {
+    console.log('delete!!')
+    toast.success("Канал успешно удален!");
+  };
 
+  const handleDeleteChannel = (channelId) => {
+    setChannelToDelete(channelId);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDeleteChannel = () => {
+    if (channelToDelete) {
+      dispatch(deleteChannel(channelToDelete));
+      setShowDeleteModal(false);
+      setChannelToDelete(null);
+      deleteNotify();
+    }
+  };
+
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false);
+    setChannelToDelete(null);
   };
 
   if (isLoading) return <div>Loading channels...</div>;
-  if (error) return <div>Error loading channels</div>;
+
+  // useEffect(() => {
+  //   if (error && error.status === 401) { // Добавлена проверка на наличие error
+  //     navigate('/'); // Перенаправляем на страницу входа при ошибке 401
+  //   }
+  // }, [error, navigate]);
+  if (error) { navigate('/login');};
 
 
   return (
     <>
-      <div className="bg-light p-3">
+       <div className="border-end px-0 bg-light d-flex flex-column h-100">
+       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
         <b>Channels</b>
         <Button
         className="p-0"
-        variant="outline-secondary"
+        variant="p-0 text-primary btn btn-group-vertical"
         // type="submit"
           // variant="link"
           // className="p-0 text-primary"
@@ -58,9 +89,9 @@ const ChatSidebar = () => {
         </Button>
         <AddChannelModal show={showModal} handleClose={handleCloseModal} />
       </div>
-      <Nav className="flex-column nav-pills nav-fill px-2 mb-3">
+      <ul className="h-100 d-block flex-column nav nav-pills nav-fill px-2 mb-3 overflow-auto">
         {channels.map((channel) => (
-          <Nav.Item key={channel.id}>
+          <li key={channel.id}>
             <Button
               onClick={() => handleSelectChannel(channel.id)}
               variant={channel.id === currentChatId ? 'secondary' : ''}
@@ -95,9 +126,43 @@ const ChatSidebar = () => {
                 </Dropdown>
               </div>
             )}
-          </Nav.Item>
+          </li>
         ))}
-      </Nav>
+      </ul>
+      </div>
+
+      <Modal
+        show={showDeleteModal}
+        onHide={handleCloseDeleteModal}
+        centered
+        backdrop="static"
+      >
+        <div className="modal-content">
+          <Modal.Header>
+            <Modal.Title>Удалить канал</Modal.Title>
+            <Button
+              variant="close"
+              aria-label="Close"
+              onClick={handleCloseDeleteModal}
+            />
+          </Modal.Header>
+          <Modal.Body>
+            <p className="lead">Уверены?</p>
+            <div className="d-flex justify-content-end">
+              <Button variant="secondary" onClick={handleCloseDeleteModal}>
+                Отменить
+              </Button>
+              <Button
+                variant="danger"
+                onClick={confirmDeleteChannel}
+                className="ms-2"
+              >
+                Удалить
+              </Button>
+            </div>
+          </Modal.Body>
+        </div>
+      </Modal>
     </>
   );
 };

@@ -6,6 +6,8 @@ import NotFoundPage from './404Page';
 import ChatLayout from './ChatLayout.jsx';
 import PrivateRoute from "../privateRoute.jsx";
 import RegistrationForm from "./RegistrationForm.jsx";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   return (
@@ -18,6 +20,7 @@ const App = () => {
         <Route path="/signup" element={<div><RegistrationForm /></div>} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      <ToastContainer />
     </BrowserRouter>
   );
 }
