@@ -8,22 +8,19 @@ import { clearAuthData } from '../../store/slices/authSlice'
 
 const ChatMessages = () => {
   const dispatch = useDispatch();
-  const { channels, currentChatId } = useSelector((state) => state.channels);
+  const { currentChatId } = useSelector((state) => state.channels);
   const navigate = useNavigate();
   //вытащить статус
   //
+  const { data: channels } = useGetChannelsQuery()
   const activeChannelId = useSelector((state) => state.currentChatId);
   const { data: messages, error, isLoading } = useGetMessagesQuery(); //вытащить статус и обработать
   //401 - перенаправляется на логин
 
-  // const err = error;
-  // console.log(err);
   useEffect(() => {
-    console.log(`this is error messages ${JSON.stringify(error)}`)
+    // console.log(`this is error messages ${error}`)
   if (error?.status === 401) {
     navigate('/login');
-    // localStorage.removeItem('user');
-    // dispatch(clearAuthData());  
   }
 }, [error, navigate]); 
 
@@ -32,10 +29,11 @@ const ChatMessages = () => {
 // }
 
   // console.log(`this is channels list ${JSON.stringify(channels)}`)
-  // console.log(`this is current chat id list ${currentChatId}`)
+  // console.log(`this is current chat id ${currentChatId}`)
   // console.log(`this is active channel ${activeChannelId}`)
 
   const channel = channels?.find(({ id }) => id === currentChatId);
+  // console.log(`this is current channel ${JSON.stringify(channels)}`)
   const filteredMessages = messages?.filter((message) => message.channelId === currentChatId);
 
   return (

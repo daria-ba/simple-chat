@@ -1,25 +1,36 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchChannels, addChannel, updateChannel, deleteChannel, setActiveChannel } from '../../store/slices/chatSlice';
-import React, { useEffect, useState } from 'react';
+import { fetchChannels, deleteChannel, setActiveChannel } from '../../store/slices/chatSlice';
+import React, { useEffect, useState, useRef } from 'react';
 import { Button, Dropdown, Modal } from 'react-bootstrap';
 import AddChannelModal from './AddChannelModal';
 import { toast } from 'react-toastify';
-import {useNavigate} from 'react-router-dom'
+import { useGetChannelsQuery } from '../../store/middlewares/index';
+import EditChannelModal from './EditChannelModal';
 
 const ChatSidebar = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [showDropdown, setShowDropdown] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [channelToDelete, setChannelToDelete] = useState(null);
-  const { channels, isLoading, error, currentChatId } = useSelector((state) => state.channels);
+  const { data: channels, isLoading } = useGetChannelsQuery();
+  const { currentChatId } = useSelector((state) => state.channels);
+  const dropdownRef = useRef(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [currentChannel, setCurrentChannel] = useState(null);
 
   useEffect(() => {
-    if (channels.length === 0) {
-    dispatch(fetchChannels());
-    }
-  }, [dispatch, channels.length]);
+    fetchChannels();
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+}, []);
 
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -28,9 +39,14 @@ const ChatSidebar = () => {
     dispatch(setActiveChannel(channelId));
   };
 
-  const handleUpdateChannel = (channelId) => {
-    const updatedChannel = { id: channelId, name: 'New Channel Name' };
-    dispatch(updateChannel(updatedChannel));
+  const handleOpenEditModal = (channel) => {
+    setCurrentChannel(channel);
+    setShowEditModal(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+    setCurrentChannel(null);
   };
 
   const handleToggleDropdown = (e, channelId) => {
@@ -64,60 +80,56 @@ const ChatSidebar = () => {
 
   if (isLoading) return <div>Loading channels...</div>;
 
-  // useEffect(() => {
-  //   if (error && error.status === 401) { // Добавлена проверка на наличие error
-  //     navigate('/'); // Перенаправляем на страницу входа при ошибке 401
-  //   }
-  // }, [error, navigate]);
-  if (error) { navigate('/login');};
-
-
   return (
     <>
        <div className="border-end px-0 bg-light d-flex flex-column h-100">
        <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
         <b>Channels</b>
         <Button
-        className="p-0"
-        variant="p-0 text-primary btn btn-group-vertical"
-        // type="submit"
-          // variant="link"
-          // className="p-0 text-primary"
+          className="p-0"
+          variant="p-0 text-primary btn btn-group-vertical"
           onClick={handleShowModal}
         >
           +
         </Button>
         <AddChannelModal show={showModal} handleClose={handleCloseModal} />
       </div>
-      <ul className="h-100 d-block flex-column nav nav-pills nav-fill px-2 mb-3 overflow-auto">
+      <ul className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
         {channels.map((channel) => (
-          <li key={channel.id}>
+          <li className='nav-item w-100' key={channel.id}>
+            <div className='d-flex dropdown btn-group'>
             <Button
               onClick={() => handleSelectChannel(channel.id)}
               variant={channel.id === currentChatId ? 'secondary' : ''}
-              className="w-100 rounded-0 text-start d-flex justify-content-between"
+              className="w-100 rounded-0 text-start text-truncate btn"
             >
               <span className="me-1"># {channel.name}</span>
+              </Button>
               {channel.removable && (
-                <span
-                  className="flex-grow-0 dropdown-toggle dropdown-toggle-split btn black"
+                <Button
+                  type='button'
+                  className="flex-grow-0 dropdown-toggle dropdown-toggle-split"
+                  variant={channel.id === currentChatId ? 'secondary' : ''}
+                  aria-expanded='false'
                   style={{ cursor: 'pointer' }}
-                  onClick={(e) => handleToggleDropdown(e, channel.id)}
-                />
+                  onClick={(e) => handleToggleDropdown(e, channel.id)}>
+                   <span className="visually-hidden">Управление каналом</span>
+                    </Button>
               )}
-            </Button>
+              </div>
             {channel.removable && showDropdown === channel.id && (
               <div style={{ position: 'relative' }}>
                 <Dropdown
                   show={showDropdown === channel.id}
+                  ref={dropdownRef}
                   className="dropdown-menu show"
                   style={{
                     position: 'absolute',
-                    inset: '0px 0px auto auto',
-                    transform: 'translate(0px, 36px)',
+                    inset: '0px auto auto 0px',
+                    transform: 'translate(-7px, 36px)',
                   }}
                 >
-                  <Dropdown.Item as="button" size="sm" onClick={() => handleUpdateChannel(channel.id)}>
+                  <Dropdown.Item as="button" size="sm" onClick={() => handleOpenEditModal(channel.id)}>
                     Rename
                   </Dropdown.Item>
                   <Dropdown.Item as="button" size="sm" onClick={() => handleDeleteChannel(channel.id)}>
@@ -131,6 +143,10 @@ const ChatSidebar = () => {
       </ul>
       </div>
 
+      <EditChannelModal
+          show={showEditModal}
+          handleClose={handleCloseEditModal}
+          actualChannel={currentChannel} />
       <Modal
         show={showDeleteModal}
         onHide={handleCloseDeleteModal}

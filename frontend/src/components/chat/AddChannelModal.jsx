@@ -5,21 +5,21 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { addChannel, setActiveChannel } from '../../store/slices/chatSlice';
 import { toast } from 'react-toastify';
+import { useAddChannelMutation } from '../../store/middlewares';
+import { useGetChannelsQuery } from '../../store/middlewares/index';
 
 const AddChannelModal = ({ show, handleClose }) => {
     // const [newChannelName, setNewChannelName] = useState('');
     const dispatch = useDispatch();
-    const channels = useSelector((state) => state.channels);
-
-    // console.log(channels.channels);
+    const { data: channels, error, isLoading } = useGetChannelsQuery();
+    // const channels = useSelector((state) => state.channels);
+    const [addChannel] = useAddChannelMutation(); 
 
     const validationSchema = Yup.object({
       channelName: Yup.string()
         .min(3, 'Название канала должно содержать не менее 3 символов')
         .max(20, 'Название канала не должно превышать 20 символов')
-        .test('unique-channel', 'Канал с таким именем уже существует', 
-          (value) => !channels.channels.some(channel => channel.name === value)
-        )
+        .notOneOf(channels,  'Канал с таким именем уже существует')
         .required('Обязательное поле'),
     });
 
@@ -27,25 +27,29 @@ const AddChannelModal = ({ show, handleClose }) => {
       console.log('create!!')
       toast.success("Канал успешно добавлен!");
     };
-
+    // .test('unique-channel', 'Канал с таким именем уже существует', 
+    //   (values) => !channels.some(channel => channel.name === values.name)
+    // )
 
     const formik = useFormik({
       initialValues: { channelName: '' },
       validationSchema,
-      onSubmit: (values, { resetForm }) => {
+      onSubmit: async (values, { resetForm }) => {
         const newChannel = { 
-          id: Date.now(),
+          // id: Date.now(),
           name: values.channelName,
         };
-  
-        dispatch(addChannel(newChannel));
-
-        dispatch(setActiveChannel(newChannel.id)); //добавить проверку, что канал создал юзер
-        //если кто-то другой создал канал, то юзеров не должно перебрасывать
-  
-        resetForm();
-        handleClose();
-        createNotify();
+        try {
+         const data = await addChannel(newChannel).unwrap();
+          resetForm();
+          handleClose();
+          if (data) {
+          dispatch(setActiveChannel(data.id));
+          }
+          createNotify();
+        } catch (err) {
+          console.error('Failed to add channel', err);
+        }
       },
       validateOnChange: false,
       validateOnBlur: false, 

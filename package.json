@@ -1,7 +1,7 @@
 {
   "name": "@hexlet/code",
   "version": "1.0.0",
-  "description": "",
+  "description": "Simple chat",
   "main": "index.js",
   "scripts": {
     "build": "npm run build --prefix frontend",
@@ -13,12 +13,9 @@
     "type": "git",
     "url": "git+https://github.com/S1iBa/frontend-project-12.git"
   },
-  "author": "",
+  "author": "Daria",
   "license": "ISC",
   "dependencies": {
     "@hexlet/chat-server": "^2.0.3"
-  },
-  "devDependencies": {
-    "webpack": "^5.93.0"
   }
 }

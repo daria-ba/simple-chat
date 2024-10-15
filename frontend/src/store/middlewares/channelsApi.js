@@ -1,9 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const channelsApi = createApi({
-    reducerPath: 'channelApi',
+    reducerPath: 'channelsApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: '/api/v1',
+        baseUrl: '/api/v1/channels',
         prepareHeaders: (headers, { getState }) => {
             const token = getState().auth.token;
             if (token) {
@@ -14,32 +14,31 @@ export const channelsApi = createApi({
         }),
         tagTypes: ['Channels'],
         endpoints: (builder) => ({
-            getChannels: builder.query({
-              query: () => 'channels',
+          getChannels: builder.query({
+              query: () => '',
               providesTags: ['Channels'],
             }),
-        addChat: builder.mutation({
+        addChannel: builder.mutation({
             query: (newChat) => ({
-                url: 'channels',
                 method: 'POST',
                 body: newChat,
             }),
         invalidatesTags: ['Channels'],
         }),
         editChannel: builder.mutation({
-            query: (chatId) => ({
-              url: `channels/${chatId}`,
+            query: (channel) => ({
+              url: channel.id,
               method: 'PATCH',
-              body: chatId,
+              body: channel,
             }),
             invalidatesTags: ['Channels'],
           }),
         deleteChat: builder.mutation({
-        query: (chatId) => ({
-            url: `channels/${chatId}`,
+        query: (id) => ({
+            url: id,
             method: 'DELETE',
         }),
-        invalidatesTags: ['Chats'],
+        invalidatesTags: ['Channels'],
         }),
     })
 })

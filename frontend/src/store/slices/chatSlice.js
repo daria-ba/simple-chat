@@ -88,7 +88,7 @@ export const updateChannel = (updatedChannel) => async (dispatch) => {
   try {
     const user = localStorage.getItem('user');
     const token = JSON.parse(user)?.token;
-    const response = await axios.put(`/api/v1/channels/${updatedChannel.id}`, updatedChannel, {
+    const response = await axios.put(`/api/v1/channels`, updatedChannel, {
       headers: { Authorization: `Bearer ${token}` },
     });
     dispatch(updateChannelSuccess(response.data));  // Обновляем канал в состоянии
