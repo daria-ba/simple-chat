@@ -15,6 +15,29 @@ const LoginForm = () => {
   });
 
   const handleSubmit = async (values) => {
+
+    // const checkServerAccess = async () => {
+    //   const user = localStorage.getItem('user');
+    //   const token = JSON.parse(user)?.token;
+    
+    //   try {
+    //     const response = await fetch('https://example.com/api/check-access', {
+    //       method: 'GET',
+    //       headers: {
+    //         'Authorization': `Bearer ${token}`,
+    //       },
+    //     });
+    
+    //     if (response.ok) {
+    //       console.log('Доступ к серверу есть');
+    //     } else {
+    //       console.log('Ошибка доступа к серверу:', response.status);
+    //     }
+    //   } catch (error) {
+    //     console.log('Ошибка сети или сервера:', error.message);
+    //   }
+    // };
+    // checkServerAccess()
     try {
       const response = await loginUser({
         username: values.username,
