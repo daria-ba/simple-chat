@@ -1,47 +1,34 @@
-import { useSelector, useDispatch } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { useGetChannelsQuery } from '../../store/middlewares/index';
-import { useGetMessagesQuery, useAddMessageMutation } from '../../store/middlewares/index';
+import { useGetMessagesQuery } from '../../store/middlewares/index';
 import MessageInput from './MessageInput';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { clearAuthData } from '../../store/slices/authSlice'
+import { useTranslation } from 'react-i18next';
 
 const ChatMessages = () => {
-  const dispatch = useDispatch();
-  const { currentChatId } = useSelector((state) => state.channels);
+  const { currentChannelId } = useSelector((state) => state.channels);
   const navigate = useNavigate();
-  //вытащить статус
-  //
+  const {t} = useTranslation();
   const { data: channels } = useGetChannelsQuery()
-  const activeChannelId = useSelector((state) => state.currentChatId);
-  const { data: messages, error, isLoading } = useGetMessagesQuery(); //вытащить статус и обработать
-  //401 - перенаправляется на логин
+  const { data: messages, error } = useGetMessagesQuery();
 
   useEffect(() => {
-    // console.log(`this is error messages ${error}`)
   if (error?.status === 401) {
     navigate('/login');
   }
 }, [error, navigate]); 
 
-// if (error) {
-//   return <div>Произошла ошибка при загрузке сообщений</div>; // Обрабатываем другие ошибки
-// }
-
-  // console.log(`this is channels list ${JSON.stringify(channels)}`)
-  // console.log(`this is current chat id ${currentChatId}`)
-  // console.log(`this is active channel ${activeChannelId}`)
-
-  const channel = channels?.find(({ id }) => id === currentChatId);
-  // console.log(`this is current channel ${JSON.stringify(channels)}`)
-  const filteredMessages = messages?.filter((message) => message.channelId === currentChatId);
+  const channel = channels?.find(({ id }) => id === currentChannelId);
+  const filteredMessages = messages?.filter((message) => message.channelId === currentChannelId);
 
   return (
 <>
   <div className="p-0 h-100 d-flex flex-column">
     <div className="bg-light mb-4 p-3 shadow-sm small">
       <p className="m-0 fw-bold">{`# ${channel?.name}`}</p>
-      <span className="text-muted">{filteredMessages?.length} messages</span>
+      <span className="text-muted">{`${filteredMessages?.length} ${t('message.messageCount', { count: filteredMessages?.length })}`}</span>
     </div>
 
     <div id="messages-box" className="chat-messages overflow-auto px-5">

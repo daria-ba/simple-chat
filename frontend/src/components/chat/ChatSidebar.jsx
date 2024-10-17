@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchChannels, deleteChannel, setActiveChannel } from '../../store/slices/chatSlice';
 import React, { useEffect, useState, useRef } from 'react';
 import { Button, Dropdown, Modal } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import AddChannelModal from './AddChannelModal';
 import { toast } from 'react-toastify';
 import { useGetChannelsQuery } from '../../store/middlewares/index';
@@ -9,18 +10,21 @@ import EditChannelModal from './EditChannelModal';
 
 const ChatSidebar = () => {
   const dispatch = useDispatch();
+  const {t} = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [showDropdown, setShowDropdown] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [channelToDelete, setChannelToDelete] = useState(null);
   const { data: channels, isLoading } = useGetChannelsQuery();
-  const { currentChatId } = useSelector((state) => state.channels);
+  const { currentChannelId } = useSelector((state) => state.channels);
   const dropdownRef = useRef(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [currentChannel, setCurrentChannel] = useState(null);
 
   useEffect(() => {
-    fetchChannels();
+    if (!channels && !isLoading) {
+    dispatch(fetchChannels());
+  }
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setShowDropdown(false);
@@ -30,7 +34,7 @@ const ChatSidebar = () => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-}, []);
+}, [channels, isLoading, dispatch]);
 
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -55,8 +59,7 @@ const ChatSidebar = () => {
   };
 
   const deleteNotify = () => {
-    console.log('delete!!')
-    toast.success("Канал успешно удален!");
+    toast.success(`${t('channel.removed')}`);
   };
 
   const handleDeleteChannel = (channelId) => {
@@ -84,10 +87,23 @@ const ChatSidebar = () => {
     <>
        <div className="border-end px-0 bg-light d-flex flex-column h-100">
        <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
-        <b>Channels</b>
+        <b>{t('channel.channels')}</b>
         <Button
           className="p-0"
           variant="p-0 text-primary btn btn-group-vertical"
+          style={{ 
+            width: '20px', 
+            height: '20px', 
+            border: '1px solid #007bff', 
+            borderRadius: '2px', 
+            backgroundColor: 'clear', 
+            color: '#007bff', 
+            display: 'inline-flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            fontSize: '17px', 
+            padding: 0 
+          }}
           onClick={handleShowModal}
         >
           +
@@ -95,12 +111,12 @@ const ChatSidebar = () => {
         <AddChannelModal show={showModal} handleClose={handleCloseModal} />
       </div>
       <ul className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
-        {channels.map((channel) => (
+        {channels && channels.map((channel) => (
           <li className='nav-item w-100' key={channel.id}>
             <div className='d-flex dropdown btn-group'>
             <Button
               onClick={() => handleSelectChannel(channel.id)}
-              variant={channel.id === currentChatId ? 'secondary' : ''}
+              variant={channel.id === currentChannelId ? 'secondary' : ''}
               className="w-100 rounded-0 text-start text-truncate btn"
             >
               <span className="me-1"># {channel.name}</span>
@@ -109,11 +125,11 @@ const ChatSidebar = () => {
                 <Button
                   type='button'
                   className="flex-grow-0 dropdown-toggle dropdown-toggle-split"
-                  variant={channel.id === currentChatId ? 'secondary' : ''}
+                  variant={channel.id === currentChannelId ? 'secondary' : ''}
                   aria-expanded='false'
                   style={{ cursor: 'pointer' }}
                   onClick={(e) => handleToggleDropdown(e, channel.id)}>
-                   <span className="visually-hidden">Управление каналом</span>
+                   <span className="visually-hidden">{t('channel.menu')}</span>
                     </Button>
               )}
               </div>
@@ -130,10 +146,10 @@ const ChatSidebar = () => {
                   }}
                 >
                   <Dropdown.Item as="button" size="sm" onClick={() => handleOpenEditModal(channel.id)}>
-                    Rename
+                  {t('channel.rename')}
                   </Dropdown.Item>
                   <Dropdown.Item as="button" size="sm" onClick={() => handleDeleteChannel(channel.id)}>
-                    Delete
+                  {t('channel.remove')}
                   </Dropdown.Item>
                 </Dropdown>
               </div>
@@ -155,7 +171,7 @@ const ChatSidebar = () => {
       >
         <div className="modal-content">
           <Modal.Header>
-            <Modal.Title>Удалить канал</Modal.Title>
+            <Modal.Title>{t('channel.remove')}</Modal.Title>
             <Button
               variant="close"
               aria-label="Close"
@@ -163,17 +179,17 @@ const ChatSidebar = () => {
             />
           </Modal.Header>
           <Modal.Body>
-            <p className="lead">Уверены?</p>
+            <p className="lead">{t('modal.confirmation')}</p>
             <div className="d-flex justify-content-end">
               <Button variant="secondary" onClick={handleCloseDeleteModal}>
-                Отменить
+              {t('modal.cancel')}
               </Button>
               <Button
                 variant="danger"
                 onClick={confirmDeleteChannel}
                 className="ms-2"
               >
-                Удалить
+                {t('modal.confirm')}
               </Button>
             </div>
           </Modal.Body>

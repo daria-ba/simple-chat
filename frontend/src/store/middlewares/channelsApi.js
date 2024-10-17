@@ -19,9 +19,9 @@ export const channelsApi = createApi({
               providesTags: ['Channels'],
             }),
         addChannel: builder.mutation({
-            query: (newChat) => ({
+            query: (newChannel) => ({
                 method: 'POST',
-                body: newChat,
+                body: newChannel,
             }),
         invalidatesTags: ['Channels'],
         }),
@@ -33,7 +33,7 @@ export const channelsApi = createApi({
             }),
             invalidatesTags: ['Channels'],
           }),
-        deleteChat: builder.mutation({
+        deleteChannel: builder.mutation({
         query: (id) => ({
             url: id,
             method: 'DELETE',
@@ -43,5 +43,4 @@ export const channelsApi = createApi({
     })
 })
 
-// export const { useGetChannelsQuery, useAddChatMutation, useDeleteChatMutation } = channelsApi;
 export default channelsApi;

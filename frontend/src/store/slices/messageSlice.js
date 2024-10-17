@@ -8,12 +8,10 @@ const messageSlice = createSlice({
   },
   reducers: {
     setMessages(state, action) {
-      // console.log(action.payload)
       state.messages = action.payload;
     },
     addMessage(state, action) {
       state.messages.push(action.payload);
-      console.log(action)
     },
     clearMessages(state) {
       state.messages = [];

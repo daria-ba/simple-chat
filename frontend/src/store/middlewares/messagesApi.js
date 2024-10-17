@@ -20,20 +20,19 @@ export const messagesApi = createApi({
       }),
       addMessage: builder.mutation({
         query: (params) => {
-          console.log(params);
           return {
             method: 'POST',
             body: params
           }
         },
-        invalidatesTags: (result, error, { chatId }) => [{ type: 'Messages', id: chatId }],
+        invalidatesTags: ({ channelId }) => [{ type: 'Messages', id: channelId }],
       }),
       deleteMessage: builder.mutation({
-        query: ({ chatId, messageId }) => ({
-          url: `chats/${chatId}/messages/${messageId}`,
+        query: ({ channelId, messageId }) => ({
+          url: `channels/${channelId}/messages/${messageId}`,
           method: 'DELETE',
         }),
-        invalidatesTags: (result, error, { chatId }) => [{ type: 'Messages', id: chatId }],
+        invalidatesTags: ({ channelId }) => [{ type: 'Messages', id: channelId }],
       }),
     }),
   });

@@ -1,11 +1,13 @@
+import React from 'react';
 import { Link } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 const NotFoundPage = () => {
+    const {t} = useTranslation();
     return (
         <div className="">
-            неправильный путь
-            <h1 class="h4 text-muted">Страница не найдена</h1>
-            <p class="text-muted">Но вы можете перейти <Link to={'./'}>на главную страницу</Link>
+            <h1 className="h4 text-muted">{t('notFoundPage.heading')}</h1>
+            <p className="text-muted">{t('notFoundPage.text')} <Link to={'./'}>{t('notFoundPage.linkText')}</Link>
             </p>
         </div>
     );

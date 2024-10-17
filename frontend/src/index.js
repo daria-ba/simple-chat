@@ -13,10 +13,10 @@ const container = document.getElementById('root');
 // if (!store) {
 //     console.error('Store не инициализирован');
 //   }
-const app = () => {
+const app = async () => {
 const root = createRoot(container);
 // const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(init());
+    root.render(await init());
 }
 
 app();

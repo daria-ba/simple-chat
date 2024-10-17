@@ -1,31 +1,32 @@
-import React, { useRef } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+/* eslint-disable react/prop-types */
+import React, { useRef, useEffect } from 'react';
+import { Modal, Button, Form, Spinner } from 'react-bootstrap';
 import { useFormik } from 'formik';
+import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { useEditChannelMutation } from '../../store/middlewares';
 import { useGetChannelsQuery } from '../../store/middlewares/index';
-
+import leoProfanity from 'leo-profanity';
 
 const EditChannelModal = ({ show, handleClose, actualChannel }) => {
     const inputRef = useRef(null);
-    const { data: channels } = useGetChannelsQuery();
-    
-    const currentChannel = channels.find(channel => channel.id === actualChannel); //массив из 1 объекта
-    const [updateChannel] = useEditChannelMutation();
+    const { data: channels, isLoading } = useGetChannelsQuery();
+    const {t} = useTranslation();
 
-    const channelNames = channels.map((channel) => {
-      if (channel.removable === true) {
-        return channel.name
-      }
-    });
+    const currentChannel = channels.find(channel => channel.id === actualChannel);
+    const [editChannel] = useEditChannelMutation();
+
+    const channelNames = channels
+    .filter(channel => channel.removable === true)
+    .map(channel => channel.name);
   
     const validationSchema = Yup.object({
       channelName: Yup.string()
-        .min(3, 'Название канала должно содержать не менее 3 символов')
-        .max(20, 'Название канала не должно превышать 20 символов')
-        .notOneOf(channelNames, 'Канал с таким именем уже существует')
-        .required('Обязательное поле'),
+      .min(3, `${t('validation.min_max')}`)
+      .max(20, `${t('validation.min_max')}`)
+      .notOneOf(channelNames, `${t('validation.uniq')}`)
+      .required(`${t('validation.required')}`),
     });
   
     const formik = useFormik({
@@ -36,12 +37,12 @@ const EditChannelModal = ({ show, handleClose, actualChannel }) => {
       validationSchema,
       onSubmit: async (values, { resetForm }) => {
         try {
-          const updatedChannel = { id: currentChannel.id, name: values.channelName };
-          const data = await updateChannel(updatedChannel).unwrap();
+          const editedChannel = { id: currentChannel.id, name: leoProfanity.clean(values.channelName) };
+          const data = await editChannel(editedChannel).unwrap();
           resetForm();
           handleClose();
           if (data) {
-            toast.success('Канал переименован');
+            toast.success(`${t('channel.renamed')}`);
           }
         } catch (err) {
           console.error('Failed to edit channel', err);
@@ -50,19 +51,38 @@ const EditChannelModal = ({ show, handleClose, actualChannel }) => {
       validateOnChange: false,
       validateOnBlur: false,
     });
-    
+
+    useEffect(() => {
+      if (show && inputRef.current) {
+        setTimeout(() => {
+        inputRef.current.focus();
+        inputRef.current.select();
+      }, 0);
+      }
+    }, [show]);
+
+    if (isLoading || !channels) {
+      return (
+        <div className="d-flex justify-content-center align-items-center">
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">{t('loading')}</span>
+          </Spinner>
+        </div>
+      );
+    }
+
     return (
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Изменить имя канала</Modal.Title>
+          <Modal.Title>{t('channel.rename')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={formik.handleSubmit}>
             <Form.Group controlId="channelName">
-              <Form.Label>Новое имя канала</Form.Label>
+              <Form.Label>{t('channel.editChannelName')}</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Введите новое имя канала"
+                placeholder={t('channel.new_name')}
                 name="channelName"
                 ref={inputRef}
                 value={formik.values.channelName}
@@ -77,10 +97,10 @@ const EditChannelModal = ({ show, handleClose, actualChannel }) => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
-            Отменить
+          {t('modal.cancel')}
           </Button>
           <Button variant="primary" onClick={formik.handleSubmit}>
-            Сохранить изменения
+          {t('modal.submit')}
           </Button>
         </Modal.Footer>
       </Modal>

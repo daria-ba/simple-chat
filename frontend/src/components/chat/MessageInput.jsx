@@ -2,15 +2,15 @@ import React, { useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import { useFormik } from 'formik';
+import { useTranslation } from 'react-i18next';
 import { useAddMessageMutation } from '../../store/middlewares/messagesApi';
+import leoProfanity from 'leo-profanity';
 
 const MessageInput = () => {
-  const { currentChatId } = useSelector((state) => state.channels);
-  // const activeChannelId = useSelector((state) => { 
-  //   return state.currentChatId });
+  const {t} = useTranslation();
+  const { currentChannelId } = useSelector((state) => state.channels);
   const username = useSelector((state) => state.auth.username);
   const inputRef = useRef(null);
-  // console.log(currentChatId)
   
   const [addMessage, { isLoading }] = useAddMessageMutation();
 
@@ -20,10 +20,10 @@ const MessageInput = () => {
     },
     onSubmit: async (values, { resetForm }) => {
       const message = {
-        body: values.message,
+        body: leoProfanity.clean(values.message),
         username,
         removable: true,
-        channelId: currentChatId,
+        channelId: currentChannelId,
         id: '',
       };
 
@@ -40,7 +40,7 @@ const MessageInput = () => {
 
   useEffect(() => {
     inputRef.current.focus();
-  }, [currentChatId]);
+  }, [currentChannelId]);
 
   return (
     <div className="mt-auto px-5 py-3">
@@ -53,7 +53,7 @@ const MessageInput = () => {
             onChange={formik.handleChange}
             value={formik.values.message}
             disabled={isLoading}
-            placeholder="Enter Message"
+            placeholder={t('message.enterMessage')}
             aria-label="new Message"
             autoComplete="off"
           />
@@ -64,7 +64,7 @@ const MessageInput = () => {
             disabled={!formik.values.message || isLoading}
             aria-label="submit"
           >
-            Send
+            {t('message.send')}
           </Button>
         </InputGroup>
       </Form>
