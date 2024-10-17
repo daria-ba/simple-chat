@@ -7,7 +7,7 @@ const ChatNavbar = () => (
   <Navbar bg="white" expand="lg" className="shadow-sm">
     <Container>
       <Navbar.Brand as={Link} to="/">
-        Chat
+        Hexlet Chat
       </Navbar.Brand>
       <LogoutButton />
     </Container>

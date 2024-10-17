@@ -1,43 +1,44 @@
-import React, { useState } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+/* eslint-disable react/prop-types */
+import React, { useRef, useEffect } from 'react';
+import { Modal, Button, Form, Spinner } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
+import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
-import { addChannel, setActiveChannel } from '../../store/slices/chatSlice';
+import { setActiveChannel } from '../../store/slices/chatSlice';
 import { toast } from 'react-toastify';
 import { useAddChannelMutation } from '../../store/middlewares';
 import { useGetChannelsQuery } from '../../store/middlewares/index';
+import leoProfanity from 'leo-profanity';
 
 const AddChannelModal = ({ show, handleClose }) => {
-    // const [newChannelName, setNewChannelName] = useState('');
+    const inputRef = useRef(null);
     const dispatch = useDispatch();
     const { data: channels, error, isLoading } = useGetChannelsQuery();
-    // const channels = useSelector((state) => state.channels);
     const [addChannel] = useAddChannelMutation(); 
+    const {t} = useTranslation();
+
+    const channelsNames = channels.map(channel => channel.name);
+
 
     const validationSchema = Yup.object({
       channelName: Yup.string()
-        .min(3, 'Название канала должно содержать не менее 3 символов')
-        .max(20, 'Название канала не должно превышать 20 символов')
-        .notOneOf(channels,  'Канал с таким именем уже существует')
-        .required('Обязательное поле'),
+        .min(3, `${t('validation.min_max')}`)
+        .max(20, `${t('validation.min_max')}`)
+        .notOneOf(channelsNames, `${t('validation.uniq')}`)
+        .required(`${t('validation.required')}`),
     });
 
     const createNotify = () => {
-      console.log('create!!')
-      toast.success("Канал успешно добавлен!");
+      toast.success(`${t('channel.created')}`);
     };
-    // .test('unique-channel', 'Канал с таким именем уже существует', 
-    //   (values) => !channels.some(channel => channel.name === values.name)
-    // )
 
     const formik = useFormik({
       initialValues: { channelName: '' },
       validationSchema,
       onSubmit: async (values, { resetForm }) => {
-        const newChannel = { 
-          // id: Date.now(),
-          name: values.channelName,
+        const newChannel = {
+          name: leoProfanity.clean(values.channelName),
         };
         try {
          const data = await addChannel(newChannel).unwrap();
@@ -52,23 +53,39 @@ const AddChannelModal = ({ show, handleClose }) => {
         }
       },
       validateOnChange: false,
-      validateOnBlur: false, 
+      validateOnBlur: false,
     });
+
+    useEffect(() => {
+      if (show) {
+        inputRef.current.focus();
+      }
+    }, [show]);
+
+    if (isLoading || !channels) {
+      return (
+        <div className="d-flex justify-content-center align-items-center">
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">{t('loading')}</span>
+          </Spinner>
+        </div>
+      );
+    }
 
   
     return (
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Add New Channel</Modal.Title>
+          <Modal.Title>{t('channel.add')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={formik.handleSubmit}>
             <Form.Group controlId="channelName">
-              <Form.Label>Channel Name</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Enter channel name"
                 name="channelName"
+                ref={inputRef}
                 value={formik.values.channelName}
                 onChange={formik.handleChange}
                 isInvalid={!!formik.errors.channelName}

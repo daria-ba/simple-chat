@@ -3,17 +3,17 @@ export const addMessage = (message) => ({
     payload: message,
   });
   
-  export const addChat = (chat) => ({
-    type: 'ADD_CHAT',
-    payload: chat,
+  export const addChannel = (channel) => ({
+    type: 'ADD_CHANNEL',
+    payload: channel,
   });
   
-  export const setActiveChat = (chatId) => ({
-    type: 'SET_ACTIVE_CHAT',
-    payload: chatId,
+  export const setActiveChannel = (channelId) => ({
+    type: 'SET_ACTIVE_CHANNEL',
+    payload: channelId,
   });
 
-  export const activeChat = (chatId) => ({
-    type: 'ACTIVE_CHAT',
-    payload: chatId,
+  export const activeChannel = (channelId) => ({
+    type: 'ACTIVE_CHANNEL',
+    payload: channelId,
   });

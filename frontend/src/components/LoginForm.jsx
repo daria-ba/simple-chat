@@ -1,13 +1,18 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import { Formik, Field, Form as FormikForm } from "formik";
-import { Button, Form, Container, Card, Navbar, Row, Col } from 'react-bootstrap';
+import { Button, Form, Container, Card, Row, Col } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { loginUser } from '../api/api.js';
 import ChatNavbar from './chat/ChatNavbar.jsx';
+import { useTranslation } from 'react-i18next';
+import loginImg from '../assets/img/login.jpeg'
 
 const LoginForm = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
+  const [loginFailed, setLoginFailed] = useState(false);
 
   const validationSchema = Yup.object({
     login: Yup.string().required('Required'),
@@ -16,28 +21,6 @@ const LoginForm = () => {
 
   const handleSubmit = async (values) => {
 
-    // const checkServerAccess = async () => {
-    //   const user = localStorage.getItem('user');
-    //   const token = JSON.parse(user)?.token;
-    
-    //   try {
-    //     const response = await fetch('https://example.com/api/check-access', {
-    //       method: 'GET',
-    //       headers: {
-    //         'Authorization': `Bearer ${token}`,
-    //       },
-    //     });
-    
-    //     if (response.ok) {
-    //       console.log('Доступ к серверу есть');
-    //     } else {
-    //       console.log('Ошибка доступа к серверу:', response.status);
-    //     }
-    //   } catch (error) {
-    //     console.log('Ошибка сети или сервера:', error.message);
-    //   }
-    // };
-    // checkServerAccess()
     try {
       const response = await loginUser({
         username: values.username,
@@ -47,8 +30,7 @@ const LoginForm = () => {
       navigate('/');
       } catch (error) {
         console.error('Ошибка входа', error);
-      } finally {
-        // setSubmitting(false);
+        setLoginFailed(true);
       }
   };
 
@@ -61,35 +43,31 @@ const LoginForm = () => {
             <Card className="shadow-sm">
               <Card.Body className="row p-5">
                 <Col md={6} className="d-flex align-items-center justify-content-center">
-                  <img src="" className="rounded-circle" alt="Войти" />
+                  <img src={loginImg} className="rounded-circle" alt="Войти" />
                 </Col>
                 <Col md={6} className="mt-3 mt-md-0">
                   <Formik
                     initialValues={{ username: '', password: '' }}
                     validationSchema={validationSchema}
-                    onSubmit={(param) => {console.log("this is onSubmit", param)}}
+                    // onSubmit={(param) => {console.log("this is onSubmit", param)}}
                   >
                     {(props) => {
-                      // console.log(props);
                       return <FormikForm
                       onSubmit={(e)=>{
                         e.preventDefault();
                         handleSubmit(props.values)}}>
-                        <h1 className="text-center mb-4">Войти</h1>
+                        <h1 className="text-center mb-4">{t('loginPage.heading')}</h1>
                         <Form.Group className="form-floating mb-3">
                           <Field
                             as={Form.Control}
                             type="text"
                             name="username"
                             id="username"
-                            placeholder="Ваш ник"
+                            placeholder={t('loginPage.username')}
                             autoComplete="username"
-                            // isInvalid={touched.username && errors.username}
+                            isInvalid={loginFailed}
                           />
-                          <Form.Label htmlFor="username">Ваш ник</Form.Label>
-                          <Form.Control.Feedback type="invalid">
-                            {/* {errors.username} */}
-                          </Form.Control.Feedback>
+                          <Form.Label htmlFor="username">{t('loginPage.username')}</Form.Label>
                         </Form.Group>
                         <Form.Group className="form-floating mb-4">
                           <Field
@@ -97,22 +75,23 @@ const LoginForm = () => {
                             type="password"
                             name="password"
                             id="password"
-                            placeholder="Пароль"
+                            placeholder={t('loginPage.password')}
                             autoComplete="current-password"
-                            // isInvalid={touched.password && errors.password}
+                            isInvalid={loginFailed}
                           />
-                          <Form.Label htmlFor="password">Пароль</Form.Label>
-                          <Form.Control.Feedback type="invalid">
-                            {/* {errors.password} */}
+                          <Form.Label htmlFor="password">{t('loginPage.password')}</Form.Label>
+                          {loginFailed && (
+                          <Form.Control.Feedback type="invalid" tooltip>
+                            {t('loginPage.loginFailed')}
                           </Form.Control.Feedback>
+                          )}
                         </Form.Group>
                         <Button
                           className="w-100 mb-3"
                           variant="outline-secondary"
                           type="submit"
-                          // disabled={isSubmitting}
                         >
-                          Войти
+                          {t('loginPage.submitBtn')}
                         </Button>
                       </FormikForm>
                     }}
@@ -122,7 +101,7 @@ const LoginForm = () => {
 
               <Card.Footer className="p-4">
                 <div className="text-center">
-                  <span>Нет аккаунта?</span> <Link to="/signup">Регистрация</Link>
+                  <span>{t('loginPage.noAccount')}</span> <Link to="/signup">{t('loginPage.signup')}</Link>
                 </div>
               </Card.Footer>
             </Card>
@@ -130,7 +109,7 @@ const LoginForm = () => {
         </Row>
       </Container>
     </div>
-                  );
+  );
 };
 
 

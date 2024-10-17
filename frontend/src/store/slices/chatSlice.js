@@ -7,7 +7,7 @@ const chatSlice = createSlice({
     channels: [],
     isLoading: false,
     error: null,
-    currentChatId: '1',
+    currentChannelId: '1',
   },
   reducers: {
     getChannelsStart: (state) => {
@@ -23,36 +23,35 @@ const chatSlice = createSlice({
       state.error = action.payload;
     },
     addChannelSuccess: (state, action) => {
-      const chatIdtoAdd = action.payload;
-      // console.log(`add channel success ${JSON.stringify(chatIdtoAdd.id)}`)
+      const channelIdtoAdd = action.payload;
       state.channels.push(action.payload);
-      if (state.currentChatId !== chatIdtoAdd.id) {
-        state.currentChatId = chatIdtoAdd.id;
+      if (state.currentChannelId !== channelIdtoAdd.id) {
+        state.currentChannelId = channelIdtoAdd.id;
       }
     },
-    updateChannelSuccess: (state, action) => {
+    editChannelSuccess: (state, action) => {
       const exists = state.channels.find(channel => channel.id === action.payload.id);
       if (!exists) {
         state.channels.push(action.payload);
       }
     },
     deleteChannelSuccess: (state, action) => {
-      const chatIdToDelete = action.payload;
-      state.channels = state.channels.filter(channel => channel.id !== chatIdToDelete);
-      if (state.currentChatId === chatIdToDelete) {
-        state.currentChatId = '1';
+      const channelIdToDelete = action.payload;
+      state.channels = state.channels.filter(channel => channel.id !== channelIdToDelete);
+      if (state.currentChannelId === channelIdToDelete) {
+        state.currentChannelId = '1';
       }
 
     },
     setActiveChannel: (state, action) => {
-      state.currentChatId = action.payload;
+      state.currentChannelId = action.payload;
     },
   },
 });
 
 export const {
   getChannelsStart, getChannelsSuccess, getChannelsFailure,
-  addChannelSuccess, updateChannelSuccess, deleteChannelSuccess, setActiveChannel
+  addChannelSuccess, editChannelSuccess, deleteChannelSuccess, setActiveChannel
 } = chatSlice.actions;
 
 export default chatSlice.reducer;
@@ -84,14 +83,14 @@ export const addChannel = (newChannel) => async (dispatch) => {
   }
 };
 
-export const updateChannel = (updatedChannel) => async (dispatch) => {
+export const editChannel = (editedChannel) => async (dispatch) => {
   try {
     const user = localStorage.getItem('user');
     const token = JSON.parse(user)?.token;
-    const response = await axios.put(`/api/v1/channels`, updatedChannel, {
+    const response = await axios.put(`/api/v1/channels`, editedChannel, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    dispatch(updateChannelSuccess(response.data));  // Обновляем канал в состоянии
+    dispatch(editChannelSuccess(response.data));
   } catch (error) {
     console.error('Ошибка изменения канала', error);
   }
@@ -104,11 +103,8 @@ export const deleteChannel = (channelId) => async (dispatch) => {
     await axios.delete(`/api/v1/channels/${channelId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    dispatch(deleteChannelSuccess(channelId));  // Удаляем канал из состояния
+    dispatch(deleteChannelSuccess(channelId));
   } catch (error) {
     console.error('Ошибка удаления канала', error);
   }
 };
-
-// export const { actions } = chatSlice;
-// export default chatSlice.reducer;

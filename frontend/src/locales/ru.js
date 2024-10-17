@@ -15,7 +15,7 @@ const ru = {
         submitBtn: 'Войти',
         signup: 'Регистрация',
         noAccount: 'Нет аккаунта?',
-        authFailed: 'Неверные имя пользователя или пароль',
+        loginFailed: 'Неверные имя пользователя или пароль',
       },
       Navigation: {
         brand: 'Chat',
@@ -27,11 +27,12 @@ const ru = {
       channel: {
         add: 'Добавить канал',
         menu: 'Управление каналом',
-        remove: 'Удалить канал',
-        rename: 'Переименовать канал',
+        remove: 'Удалить',
+        rename: 'Переименовать',
         channels: 'Каналы',
         created: 'Канал создан',
         renamed: 'Канал переименован',
+        new_name: 'Введите новое имя канала',
         removed: 'Канал удалён',
         channelName: 'Имя канала',
         editChannelName: 'Новое имя канала',
@@ -47,8 +48,7 @@ const ru = {
       },
       validation: {
         required: 'Обязательное поле',
-        min: 'От 3 до 20 символов',
-        max: 'От 3 до 20 символов',
+        min_max: 'От 3 до 20 символов',
         uniq: 'Должно быть уникальным',
         passwordMustMatch: 'Пароли должны совпадать',
         passwordCharacters: 'Не менее 6 символов',
