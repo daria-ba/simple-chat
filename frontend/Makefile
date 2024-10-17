@@ -8,4 +8,4 @@ build:
 	npm run build
 
 lint:
-	npx eslint --no-eslintrc --config .eslintrc.yml .
+	npx eslint .
