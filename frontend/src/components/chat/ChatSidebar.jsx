@@ -21,8 +21,6 @@ const ChatSidebar = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [currentChannel, setCurrentChannel] = useState(null);
 
-  console.log(channels);
-
   useEffect(() => {
     if (!isLoading && channels === undefined) {
     dispatch(fetchChannels());
@@ -82,7 +80,6 @@ const ChatSidebar = () => {
     setShowDeleteModal(false);
     setChannelToDelete(null);
   };
-
   if (isLoading) return <div>Loading channels...</div>;
 
   return (
@@ -93,6 +90,7 @@ const ChatSidebar = () => {
         <Button
           className="p-0"
           variant="p-0 text-primary btn btn-group-vertical"
+          aria-label={t('channel.add')}
           style={{ 
             width: '20px', 
             height: '20px', 
@@ -117,11 +115,16 @@ const ChatSidebar = () => {
           <li className='nav-item w-100' key={channel.id}>
             <div className='d-flex dropdown btn-group'>
             <Button
+              type="button"
+              key={channel.id}
               onClick={() => handleSelectChannel(channel.id)}
               variant={channel.id === currentChannelId ? 'secondary' : ''}
-              className="w-100 rounded-0 text-start text-truncate btn"
+              className="w-100 rounded-0 text-start text-truncate"
+              aria-label={channel.name}
             >
-              <span className="me-1"># {channel.name}</span>
+              <span className="me-1">#</span>
+              {channel.name}
+              {/* <span name={channel.name}>{channel.name}</span> */}
               </Button>
               {channel.removable && (
                 <Button

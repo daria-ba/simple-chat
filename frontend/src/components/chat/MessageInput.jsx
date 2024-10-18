@@ -54,7 +54,7 @@ const MessageInput = () => {
             value={formik.values.message}
             disabled={isLoading}
             placeholder={t('message.enterMessage')}
-            aria-label="new Message"
+            aria-label={t('message.newMessage')}
             autoComplete="off"
           />
           <Button

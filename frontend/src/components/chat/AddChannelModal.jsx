@@ -29,7 +29,7 @@ const AddChannelModal = ({ show, handleClose }) => {
     });
 
     const createNotify = () => {
-      toast.success(`${t('channel.created')}`);
+      toast.success(t('channel.created'));
     };
 
     const formik = useFormik({
@@ -69,7 +69,8 @@ const AddChannelModal = ({ show, handleClose }) => {
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={formik.handleSubmit}>
-            <Form.Group controlId="channelName">
+            <Form.Group>
+            <Form.Label htmlFor="name" visuallyHidden>{t('channel.channelName')}</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Enter channel name"

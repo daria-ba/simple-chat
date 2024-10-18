@@ -195,7 +195,7 @@ test.describe('two users chatting', () => {
 
     const context2 = await browser.newContext();
     page2 = await context2.newPage();
-    await page2.goto('http://localhost:3000');
+    await page2.goto('http://localhost:5000');
 
     await page2.locator('text=Hexlet Chat').first().click();
     await page2.locator('text=Ваш ник').first().type(newUser.login);
