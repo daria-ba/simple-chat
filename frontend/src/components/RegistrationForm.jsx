@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useFormik } from "formik";
 import { Button, Form, Container, Card, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +16,7 @@ const RegistrationForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const inputRef = useRef(null);
 
   const signupSchema = Yup.object().shape({
     username: Yup.string()
@@ -26,7 +27,7 @@ const RegistrationForm = () => {
       .min(6, t('validation.passwordCharacters'))
       .required(t('validation.required')),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], t('validation.passwordCharacters'))
+      .oneOf([Yup.ref('password'), null], t('validation.passwordMustMatch'))
       .required(t('validation.required'))
       .test(
         'confirmPassword',
@@ -56,13 +57,23 @@ const RegistrationForm = () => {
         console.error("Ошибка регистрации", error);
         setRegistrationFailed(true);
       }
-    },
+    }
   });
+
+  useEffect(() => {
+    if (inputRef.current) {
+    inputRef.current.focus();
+    }
+    if (registrationFailed) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+  }, [registrationFailed]);
 
   return (
     <div className="d-flex flex-column h-100 bg-light">
       <ChatNavbar />
-      <Container fluid className="h-100, vh-100">
+      <Container fluid className="h-100 vh-100">
         <Row className="justify-content-center align-content-center h-100">
           <Col xs={12} md={8} xxl={6}>
             <Card className="shadow-sm">
@@ -80,9 +91,10 @@ const RegistrationForm = () => {
                         id="username"
                         placeholder={t('signupPage.usernamePlaceholder')}
                         autoComplete="username"
+                        ref={inputRef}
                         value={formik.values.username}
                         onChange={formik.handleChange}
-                        isInvalid={formik.touched.username && formik.errors.username}
+                        isInvalid={formik.touched.username && formik.errors.username || registrationFailed}
                       />
                       <Form.Label htmlFor="username">{t('signupPage.username')}</Form.Label>
                       {!registrationFailed && (
@@ -101,7 +113,7 @@ const RegistrationForm = () => {
                         autoComplete="current-password"
                         value={formik.values.password}
                         onChange={formik.handleChange}
-                        isInvalid={formik.touched.password && formik.errors.password}
+                        isInvalid={formik.touched.password && formik.errors.password || registrationFailed}
                       />
                       <Form.Label htmlFor="password">{t('signupPage.password')}</Form.Label>
                       {!registrationFailed && (
@@ -120,19 +132,15 @@ const RegistrationForm = () => {
                         autoComplete="confirmPassword"
                         value={formik.values.confirmPassword}
                         onChange={formik.handleChange}
-                        isInvalid={formik.touched.confirmPassword && formik.errors.confirmPassword}
+                        isInvalid={formik.touched.confirmPassword && formik.errors.confirmPassword || registrationFailed}
                       />
                       <Form.Label htmlFor="confirmPassword">{t('signupPage.confirm')}</Form.Label>
                       <Form.Control.Feedback type="invalid" tooltip>
-                      {formik.errors.confirmPassword && t(formik.errors.confirmPassword)}
+                      {registrationFailed
+                      ? t('signupPage.alreadyExists')
+                      : t(formik.errors.confirmPassword)}
                       </Form.Control.Feedback>
                     </Form.Group>
-
-                    {registrationFailed && (
-                      <div className="text-danger mb-3">
-                        {t('signupPage.alreadyExists')}
-                      </div>
-                    )}
 
                     <Button
                       className="w-100 mb-3"

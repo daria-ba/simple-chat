@@ -56,7 +56,11 @@ export const {
 
 export default chatSlice.reducer;
 
-export const fetchChannels = () => async (dispatch) => {
+export const fetchChannels = () => async (dispatch, getState) => {
+  const { channels } = getState();
+  if (channels.length > 0) {
+    return;
+  }
   dispatch(getChannelsStart());
   try {
     const user = localStorage.getItem('user');

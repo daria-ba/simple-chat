@@ -21,8 +21,10 @@ const ChatSidebar = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [currentChannel, setCurrentChannel] = useState(null);
 
+  console.log(channels);
+
   useEffect(() => {
-    if (!channels && !isLoading) {
+    if (!isLoading && channels === undefined) {
     dispatch(fetchChannels());
   }
     const handleClickOutside = (event) => {
@@ -32,7 +34,7 @@ const ChatSidebar = () => {
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+    document.removeEventListener('mousedown', handleClickOutside);
     };
 }, [channels, isLoading, dispatch]);
 
@@ -108,7 +110,7 @@ const ChatSidebar = () => {
         >
           +
         </Button>
-        <AddChannelModal show={showModal} handleClose={handleCloseModal} />
+        <AddChannelModal show={showModal} channels={channels} handleClose={handleCloseModal} />
       </div>
       <ul className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
         {channels && channels.map((channel) => (
@@ -161,6 +163,7 @@ const ChatSidebar = () => {
 
       <EditChannelModal
           show={showEditModal}
+          channels={channels}
           handleClose={handleCloseEditModal}
           actualChannel={currentChannel} />
       <Modal
