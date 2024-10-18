@@ -17,5 +17,8 @@
   "license": "ISC",
   "dependencies": {
     "@hexlet/chat-server": "^2.0.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.1"
   }
 }
