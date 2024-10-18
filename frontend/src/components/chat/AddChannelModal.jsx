@@ -20,7 +20,6 @@ const AddChannelModal = ({ show, handleClose }) => {
 
     const channelsNames = channels.map(channel => channel.name);
 
-
     const validationSchema = Yup.object({
       channelName: Yup.string()
         .min(3, `${t('validation.min_max')}`)
@@ -61,16 +60,6 @@ const AddChannelModal = ({ show, handleClose }) => {
         inputRef.current.focus();
       }
     }, [show]);
-
-    if (isLoading || !channels) {
-      return (
-        <div className="d-flex justify-content-center align-items-center">
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">{t('loading')}</span>
-          </Spinner>
-        </div>
-      );
-    }
 
   
     return (

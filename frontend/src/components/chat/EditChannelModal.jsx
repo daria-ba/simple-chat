@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useRef, useEffect } from 'react';
-import { Modal, Button, Form, Spinner } from 'react-bootstrap';
+import { Modal, Button, Form } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
@@ -11,7 +11,7 @@ import leoProfanity from 'leo-profanity';
 
 const EditChannelModal = ({ show, handleClose, actualChannel }) => {
     const inputRef = useRef(null);
-    const { data: channels, isLoading } = useGetChannelsQuery();
+    const { data: channels, error, isLoading } = useGetChannelsQuery();
     const {t} = useTranslation();
 
     const currentChannel = channels.find(channel => channel.id === actualChannel);
@@ -20,7 +20,7 @@ const EditChannelModal = ({ show, handleClose, actualChannel }) => {
     const channelNames = channels
     .filter(channel => channel.removable === true)
     .map(channel => channel.name);
-  
+
     const validationSchema = Yup.object({
       channelName: Yup.string()
       .min(3, `${t('validation.min_max')}`)
@@ -54,22 +54,10 @@ const EditChannelModal = ({ show, handleClose, actualChannel }) => {
 
     useEffect(() => {
       if (show && inputRef.current) {
-        setTimeout(() => {
         inputRef.current.focus();
         inputRef.current.select();
-      }, 0);
       }
     }, [show]);
-
-    if (isLoading || !channels) {
-      return (
-        <div className="d-flex justify-content-center align-items-center">
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">{t('loading')}</span>
-          </Spinner>
-        </div>
-      );
-    }
 
     return (
       <Modal show={show} onHide={handleClose}>

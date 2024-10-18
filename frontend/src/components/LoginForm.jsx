@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react';
-import { Formik, Field, Form as FormikForm } from "formik";
+import React, { useState, useRef, useEffect } from 'react';
+import { useFormik } from "formik";
 import { Button, Form, Container, Card, Row, Col } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
@@ -8,31 +8,58 @@ import { loginUser } from '../api/api.js';
 import ChatNavbar from './chat/ChatNavbar.jsx';
 import { useTranslation } from 'react-i18next';
 import loginImg from '../assets/img/login.jpeg'
+import { setAuthData, login } from '../store/slices/authSlice';
+import { useDispatch } from 'react-redux';
 
 const LoginForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [loginFailed, setLoginFailed] = useState(false);
+  const inputRef = useRef(null);
 
-  const validationSchema = Yup.object({
-    login: Yup.string().required('Required'),
-    password: Yup.string().required('Required')
+  const authSchema = Yup.object({
+    username: Yup.string().required(t('validation.required')),
+    password: Yup.string().required(t('validation.required'))
   });
 
-  const handleSubmit = async (values) => {
-
+  const formik = useFormik({
+    initialValues: {
+      username: '',
+      password: '',
+    },
+    validationSchema: authSchema,
+    onSubmit: async(values) => {
     try {
       const response = await loginUser({
         username: values.username,
         password: values.password,
       });
+      const { token, username } = response;
+      console.log(token)
       localStorage.setItem('user', JSON.stringify(response))
+      dispatch(setAuthData({ token, username }));
+      dispatch(login({ token, username }));
       navigate('/');
       } catch (error) {
         console.error('Ошибка входа', error);
         setLoginFailed(true);
       }
-  };
+  },
+});
+
+  useEffect(() => {
+    if (inputRef.current) {
+    inputRef.current.focus();
+    inputRef.current.select();
+    }
+    if (loginFailed) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+
+  }, [loginFailed]);
+
 
   return (
     <div className="d-flex flex-column h-100 bg-light">
@@ -46,39 +73,38 @@ const LoginForm = () => {
                   <img src={loginImg} className="rounded-circle" alt="Войти" />
                 </Col>
                 <Col md={6} className="mt-3 mt-md-0">
-                  <Formik
-                    initialValues={{ username: '', password: '' }}
-                    validationSchema={validationSchema}
-                    // onSubmit={(param) => {console.log("this is onSubmit", param)}}
-                  >
-                    {(props) => {
-                      return <FormikForm
-                      onSubmit={(e)=>{
-                        e.preventDefault();
-                        handleSubmit(props.values)}}>
-                        <h1 className="text-center mb-4">{t('loginPage.heading')}</h1>
-                        <Form.Group className="form-floating mb-3">
-                          <Field
-                            as={Form.Control}
-                            type="text"
-                            name="username"
-                            id="username"
-                            placeholder={t('loginPage.username')}
-                            autoComplete="username"
-                            isInvalid={loginFailed}
-                          />
+                  <Form onSubmit={formik.handleSubmit} noValidate>
+                    <h1 className="text-center mb-4">{t('loginPage.heading')}</h1>
+                    <Form.Group className="form-floating mb-3">
+                      <Form.Control
+                        type="text"
+                        name="username"
+                        id="username"
+                        placeholder={t('loginPage.username')}
+                        autoComplete="username"
+                        ref={inputRef}
+                        value={formik.values.username}
+                        onChange={formik.handleChange}
+                        isInvalid={loginFailed}
+                      />
                           <Form.Label htmlFor="username">{t('loginPage.username')}</Form.Label>
+                          {!loginFailed && (
+                          <Form.Control.Feedback type="invalid" tooltip>
+                            {t('loginPage.loginFailed')}
+                          </Form.Control.Feedback>
+                          )}
                         </Form.Group>
                         <Form.Group className="form-floating mb-4">
-                          <Field
-                            as={Form.Control}
-                            type="password"
-                            name="password"
-                            id="password"
-                            placeholder={t('loginPage.password')}
-                            autoComplete="current-password"
-                            isInvalid={loginFailed}
-                          />
+                      <Form.Control
+                        type="password"
+                        name="password"
+                        id="password"
+                        placeholder={t('loginPage.password')}
+                        autoComplete="current-password"
+                        value={formik.values.password}
+                        onChange={formik.handleChange}
+                        isInvalid={loginFailed}
+                      />
                           <Form.Label htmlFor="password">{t('loginPage.password')}</Form.Label>
                           {loginFailed && (
                           <Form.Control.Feedback type="invalid" tooltip>
@@ -86,6 +112,7 @@ const LoginForm = () => {
                           </Form.Control.Feedback>
                           )}
                         </Form.Group>
+
                         <Button
                           className="w-100 mb-3"
                           variant="outline-secondary"
@@ -93,9 +120,7 @@ const LoginForm = () => {
                         >
                           {t('loginPage.submitBtn')}
                         </Button>
-                      </FormikForm>
-                    }}
-                  </Formik>
+                      </Form>
                 </Col>
               </Card.Body>
 
