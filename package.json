@@ -2,10 +2,7 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "Simple chat",
-  "main": "src/index.js",
-  "private": true,
-  "type": "module",
-  "workspaces": ["frontend"],
+  "main": "index.js",
   "scripts": {
     "build": "npm run build --prefix frontend",
     "start": "start-server -s ./frontend/build",
