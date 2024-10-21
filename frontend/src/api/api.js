@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export default loginUser = async (credentials) => {
+const loginUser = async (credentials) => {
   try {
     const response = await axios.post('/api/v1/login', credentials);
     return response.data;
@@ -8,3 +8,5 @@ export default loginUser = async (credentials) => {
     throw new Error(error);
   }
 };
+
+export default loginUser;
