@@ -48,8 +48,7 @@ const chatSlice = createSlice({
       }
     },
     setActiveChannel: (state, action) => {
-      const newState = { ...state };
-      newState.currentChannelId = action.payload;
+      state.currentChannelId = action.payload;
     },
   },
 });
