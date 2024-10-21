@@ -18,18 +18,19 @@ const chatSlice = createSlice({
     getChannelsSuccess: (state, action) => {
       const newState = { ...state };
       newState.isLoading = false;
-      state.channels = action.payload;
+      newState.channels = action.payload;
     },
     getChannelsFailure: (state, action) => {
       const newState = { ...state };
       newState.isLoading = false;
-      state.error = action.payload;
+      newState.error = action.payload;
     },
     addChannelSuccess: (state, action) => {
+      const newState = { ...state };
       const channelIdtoAdd = action.payload;
       state.channels.push(action.payload);
       if (state.currentChannelId !== channelIdtoAdd.id) {
-        state.currentChannelId = channelIdtoAdd.id;
+        newState.currentChannelId = channelIdtoAdd.id;
       }
     },
     editChannelSuccess: (state, action) => {
@@ -39,14 +40,16 @@ const chatSlice = createSlice({
       }
     },
     deleteChannelSuccess: (state, action) => {
+      const newState = { ...state };
       const channelIdToDelete = action.payload;
-      state.channels = state.channels.filter((channel) => channel.id !== channelIdToDelete);
+      newState.channels = state.channels.filter((channel) => channel.id !== channelIdToDelete);
       if (state.currentChannelId === channelIdToDelete) {
-        state.currentChannelId = '1';
+        newState.currentChannelId = '1';
       }
     },
     setActiveChannel: (state, action) => {
-      state.currentChannelId = action.payload;
+      const newState = { ...state };
+      newState.currentChannelId = action.payload;
     },
   },
 });
