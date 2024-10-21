@@ -24,26 +24,26 @@ const ChatMessages = () => {
   const filteredMessages = messages?.filter((message) => message.channelId === currentChannelId);
 
   return (
-<>
-  <div className="p-0 h-100 d-flex flex-column">
-    <div className="bg-light mb-4 p-3 shadow-sm small">
-      <p className="m-0 fw-bold">{`# ${channel?.name}`}</p>
-      <span className="text-muted">{`${filteredMessages?.length} ${t('message.messageCount', { count: filteredMessages?.length })}`}</span>
-    </div>
-
-    <div id="messages-box" className="chat-messages overflow-auto px-5">
-      {filteredMessages?.map((message) => (
-        <div key={message.id}>
-          <b>{message.username}</b>{': '}
-          {message.body}
+    <>
+      <div className="p-0 h-100 d-flex flex-column">
+        <div className="bg-light mb-4 p-3 shadow-sm small">
+          <p className="m-0 fw-bold">{`# ${channel?.name}`}</p>
+          <span className="text-muted">{`${filteredMessages?.length} ${t('message.messageCount', { count: filteredMessages?.length })}`}</span>
         </div>
-      ))}
-    </div>
-    <div className="mt-auto px-5 py-3">
-    <MessageInput />
-    </div>
-    </div>
-</>
+
+        <div id="messages-box" className="chat-messages overflow-auto px-5">
+          {filteredMessages?.map((message) => (
+            <div key={message.id}>
+              <b>{message.username}</b>{': '}
+              {message.body}
+            </div>
+          ))}
+        </div>
+        <div className="mt-auto px-5 py-3">
+        <MessageInput />
+        </div>
+        </div>
+    </>
   )
 };
 

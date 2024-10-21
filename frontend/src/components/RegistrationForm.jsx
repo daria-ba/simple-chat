@@ -1,15 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useFormik } from "formik";
-import { Button, Form, Container, Card, Row, Col } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import axios from 'axios';
-import { useTranslation } from 'react-i18next';
-import { setAuthData, login } from '../store/slices/authSlice';
-import { useDispatch } from 'react-redux';
+import { useFormik } from 'formik';
+import { Button, Form, Container, Card, Row, Col } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import ChatNavbar from './chat/ChatNavbar';
 import leoProfanity from 'leo-profanity';
 import regImg from '../assets/img/signup.jpg'
+import { setAuthData, login } from '../store/slices/authSlice';
 
 const RegistrationForm = () => {
   const [registrationFailed, setRegistrationFailed] = useState(false);
@@ -45,16 +45,16 @@ const RegistrationForm = () => {
     validationSchema: signupSchema,
     onSubmit: async(values) => {
       try {
-        const response = await axios.post('/api/v1/signup', { 
-          username: leoProfanity.clean(values.username), 
-          password: values.password 
+        const response = await axios.post('/api/v1/signup', {
+          username: leoProfanity.clean(values.username),
+          password: values.password,
         });
         const { token, username } = response.data;
         dispatch(setAuthData({ token, username }));
         dispatch(login({ token, username }));
         navigate('/');
       } catch (error) {
-        console.error("Ошибка регистрации", error);
+        console.error('Ошибка регистрации', error);
         setRegistrationFailed(true);
       }
     }

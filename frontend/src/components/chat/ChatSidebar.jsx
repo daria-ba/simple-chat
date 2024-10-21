@@ -34,7 +34,7 @@ const ChatSidebar = () => {
     return () => {
     document.removeEventListener('mousedown', handleClickOutside);
     };
-}, [channels, isLoading, dispatch]);
+  }, [channels, isLoading, dispatch]);
 
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -112,8 +112,8 @@ const ChatSidebar = () => {
       </div>
       <ul className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
         {channels && channels.map((channel) => (
-          <li className='nav-item w-100' key={channel.id}>
-            <div className='d-flex dropdown btn-group'>
+          <li className="nav-item w-100" key={channel.id}>
+            <div className="d-flex dropdown btn-group">
             <Button
               type="button"
               key={channel.id}
@@ -124,18 +124,18 @@ const ChatSidebar = () => {
             >
               <span className="me-1">#</span>
               {channel.name}
-              {/* <span name={channel.name}>{channel.name}</span> */}
               </Button>
               {channel.removable && (
                 <Button
-                  type='button'
+                  type="button"
                   className="flex-grow-0 dropdown-toggle dropdown-toggle-split"
                   variant={channel.id === currentChannelId ? 'secondary' : ''}
-                  aria-expanded='false'
-                  style={{ cursor: 'pointer' }}
+                  aria-expanded="false"
+                  style={{ cursor: "pointer" }}
                   onClick={(e) => handleToggleDropdown(e, channel.id)}>
-                   <span className="visually-hidden">{t('channel.menu')}</span>
-                    </Button>
+                   <span className="visually-hidden">{t('channel.menu')}
+                   </span>
+                </Button>
               )}
               </div>
             {channel.removable && showDropdown === channel.id && (
@@ -162,7 +162,7 @@ const ChatSidebar = () => {
           </li>
         ))}
       </ul>
-      </div>
+    </div>
 
       <EditChannelModal
           show={showEditModal}
@@ -204,6 +204,5 @@ const ChatSidebar = () => {
     </>
   );
 };
-
 
 export default ChatSidebar;
