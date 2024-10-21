@@ -16,35 +16,41 @@ const chatSlice = createSlice({
       newState.error = null;
     },
     getChannelsSuccess: (state, action) => {
-      state.isLoading = false;
-      state.channels = action.payload;
+      const newState = { ...state };
+      newState.isLoading = false;
+      newState.channels = action.payload;
     },
     getChannelsFailure: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
+      const newState = { ...state };
+      newState.isLoading = false;
+      newState.error = action.payload;
     },
     addChannelSuccess: (state, action) => {
+      const newState = { ...state };
       const channelIdtoAdd = action.payload;
-      state.channels.push(action.payload);
-      if (state.currentChannelId !== channelIdtoAdd.id) {
-        state.currentChannelId = channelIdtoAdd.id;
+      newState.channels.push(action.payload);
+      if (newState.currentChannelId !== channelIdtoAdd.id) {
+        newState.currentChannelId = channelIdtoAdd.id;
       }
     },
     editChannelSuccess: (state, action) => {
-      const exists = state.channels.find(channel => channel.id === action.payload.id);
+      const newState = { ...state };
+      const exists = newState.channels.find(channel => channel.id === action.payload.id);
       if (!exists) {
-        state.channels.push(action.payload);
+        newState.channels.push(action.payload);
       }
     },
     deleteChannelSuccess: (state, action) => {
+      const newState = { ...state };
       const channelIdToDelete = action.payload;
-      state.channels = state.channels.filter(channel => channel.id !== channelIdToDelete);
-      if (state.currentChannelId === channelIdToDelete) {
-        state.currentChannelId = '1';
+      newState.channels = state.channels.filter(channel => channel.id !== channelIdToDelete);
+      if (newState.currentChannelId === channelIdToDelete) {
+        newState.currentChannelId = '1';
       }
     },
     setActiveChannel: (state, action) => {
-      state.currentChannelId = action.payload;
+      const newState = { ...state };
+      newState.currentChannelId = action.payload;
     },
   },
 });

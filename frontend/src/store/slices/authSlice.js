@@ -15,23 +15,26 @@ const authSlice = createSlice({
   },
   reducers: {
     login(state, action) {
+      const newState = { ...state };
       const { token, username } = action.payload;
-      state.token = token;
-      state.username = username;
-      state.isAuthenticated = true;
+      newState.token = token;
+      newState.username = username;
+      newState.isAuthenticated = true;
       localStorage.setItem('user', JSON.stringify({ token, username }));
     },
     clearAuthData(state) {
-      state.token = null;
-      state.username = '';
-      state.isAuthenticated = false;
+      const newState = { ...state };
+      newState.token = null;
+      newState.username = '';
+      newState.isAuthenticated = false;
       localStorage.removeItem('user');
     },
     setAuthData(state, action) {
+      const newState = { ...state };
       const { token, username } = action.payload;
-      state.token = token;
-      state.username = username;
-      state.isAuthenticated = true;
+      newState.token = token;
+      newState.username = username;
+      newState.isAuthenticated = true;
       localStorage.setItem('user', JSON.stringify({ token, username }));
     },
   },
