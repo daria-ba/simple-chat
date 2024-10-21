@@ -11,8 +11,9 @@ const chatSlice = createSlice({
   },
   reducers: {
     getChannelsStart: (state) => {
-      state.isLoading = true;
-      state.error = null;
+      const newState = { ...state };
+      newState.isLoading = true;
+      newState.error = null;
     },
     getChannelsSuccess: (state, action) => {
       state.isLoading = false;
