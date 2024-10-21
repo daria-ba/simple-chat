@@ -14,8 +14,3 @@ export const {
   useEditMessageMutation,
   useRemoveMessageMutation,
 } = messagesApi;
-
-export default {
-  channelsApi,
-  messagesApi,
-};
