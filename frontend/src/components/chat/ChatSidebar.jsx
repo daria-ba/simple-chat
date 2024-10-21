@@ -139,7 +139,7 @@ const ChatSidebar = () => {
                     </span>
                   </Button>
                 )}
-                </div>
+              </div>
               {channel.removable && showDropdown === channel.id && (
                 <div style={{ position: 'relative' }}>
                   <Dropdown
@@ -171,7 +171,7 @@ const ChatSidebar = () => {
         channels={channels}
         handleClose={handleCloseEditModal}
         actualChannel={currentChannel}
-        />
+      />
       <Modal
         show={showDeleteModal}
         onHide={handleCloseDeleteModal}
