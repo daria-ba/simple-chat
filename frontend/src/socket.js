@@ -1,9 +1,9 @@
 import { io } from 'socket.io-client';
 import channelsApi from './store/middlewares/channelsApi';
 import messagesApi from './store/middlewares/messagesApi';
-import { setActiveChannel } from '../src/store/slices/chatSlice';
+import { setActiveChannel } from './store/slices/chatSlice';
 
-const socket = (store) => {
+const socketIo = (store) => {
   const socket = io();
 
   socket.on('newMessage', (payload) => {
@@ -37,9 +37,8 @@ const socket = (store) => {
       if (channel) {
         channel.name = payload.name;
       }
-
     }));
   });
 };
 
-export default socket;
+export default socketIo;

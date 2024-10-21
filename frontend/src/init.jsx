@@ -6,7 +6,7 @@ import { I18nextProvider, initReactI18next } from 'react-i18next';
 import leoProfanity from 'leo-profanity';
 import store from './store/store.js';
 import App from './components/App.jsx';
-import socket from './socket.js';
+import socketIo from './socket.js';
 import resources from './locales/index.js';
 
 const rollbarConfig = {
@@ -24,7 +24,7 @@ const init = async () => {
       fallbackLng: 'ru',
     });
 
-  socket(store);
+    socketIo(store);
 
   return (
     <RollbarProvider config={rollbarConfig}>
