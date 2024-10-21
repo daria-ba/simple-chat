@@ -107,7 +107,8 @@ const LoginForm = () => {
                         autoComplete="current-password"
                         value={formik.values.password}
                         onChange={formik.handleChange}
-                        isInvalid={loginFailed} />
+                        isInvalid={loginFailed}
+                      />
                       <Form.Label htmlFor="password">{t('loginPage.password')}</Form.Label>
                       {loginFailed && (
                         <Form.Control.Feedback type="invalid" tooltip>
@@ -122,7 +123,7 @@ const LoginForm = () => {
                         >
                           {t('loginPage.submitBtn')}
                         </Button>
-                      </Form>
+                  </Form>
                 </Col>
               </Card.Body>
 

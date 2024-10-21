@@ -15,31 +15,31 @@ export const channelsApi = createApi({
   tagTypes: ['Channels'],
   endpoints: (builder) => ({
     getChannels: builder.query({
-        query: () => '',
-        providesTags: ['Channels'],
+      query: () => '',
+      providesTags: ['Channels'],
     }),
-  addChannel: builder.mutation({
-    query: (newChannel) => ({
-      method: 'POST',
-      body: newChannel,
-    }),
-    invalidatesTags: ['Channels'],
-  }),
-  editChannel: builder.mutation({
-    query: (channel) => ({
-      url: channel.id,
-      method: 'PATCH',
-      body: channel,
-    }),
-    invalidatesTags: ['Channels'],
-  }),
-      deleteChannel: builder.mutation({
-      query: (id) => ({
-          url: id,
-          method: 'DELETE',
+    addChannel: builder.mutation({
+      query: (newChannel) => ({
+        method: 'POST',
+        body: newChannel,
       }),
       invalidatesTags: ['Channels'],
+    }),
+    editChannel: builder.mutation({
+      query: (channel) => ({
+        url: channel.id,
+        method: 'PATCH',
+        body: channel,
       }),
+      invalidatesTags: ['Channels'],
+    }),
+    deleteChannel: builder.mutation({
+      query: (id) => ({
+        url: id,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Channels'],
+    }),
   }),
 });
 

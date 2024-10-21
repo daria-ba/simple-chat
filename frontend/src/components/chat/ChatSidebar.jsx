@@ -86,30 +86,30 @@ const ChatSidebar = () => {
     <>
       <div className="border-end px-0 bg-light d-flex flex-column h-100">
         <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
-         <b>{t('channel.channels')}</b>
-         <Button
-          className="p-0"
-          variant="p-0 text-primary btn btn-group-vertical"
-          aria-label={t('channel.add')}
-          style={{
-            width: '20px',
-            height: '20px',
-            border: '1px solid #007bff',
-            borderRadius: '2px',
-            backgroundColor: 'clear',
-            color: '#007bff',
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '17px',
-            padding: 0,
+          <b>{t('channel.channels')}</b>
+          <Button
+            className="p-0"
+            variant="p-0 text-primary btn btn-group-vertical"
+            aria-label={t('channel.add')}
+            style={{
+              width: '20px',
+              height: '20px',
+              border: '1px solid #007bff',
+              borderRadius: '2px',
+              backgroundColor: 'clear',
+              color: '#007bff',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '17px',
+              padding: 0,
           }}
           onClick={handleShowModal}
-        >
+          >
           +
         </Button>
-         <AddChannelModal show={showModal} channels={channels} handleClose={handleCloseModal} />
-        </div>
+          <AddChannelModal show={showModal} channels={channels} handleClose={handleCloseModal} />
+      </div>
         <ul className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
         {channels && channels.map((channel) => (
           <li className="nav-item w-100" key={channel.id}>
@@ -163,7 +163,7 @@ const ChatSidebar = () => {
           </li>
         ))}
       </ul>
-      </div>
+    </div>
 
       <EditChannelModal
       show={showEditModal}
