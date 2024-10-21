@@ -1,24 +1,21 @@
-import { 
-  useGetChannelsQuery, 
-  useAddChannelMutation, 
-  useEditChannelMutation, 
-  useRemoveChannelMutation 
-} from './channelsApi.js';
+import channelsApi from './channelsApi.js';
+import messagesApi from './messagesApi.js';
 
-import { 
-  useGetMessagesQuery, 
-  useAddMessageMutation, 
-  useEditMessageMutation, 
-  useRemoveMessageMutation 
-} from './messagesApi.js';
-
-export {
+export const {
   useGetChannelsQuery,
   useAddChannelMutation,
   useEditChannelMutation,
   useRemoveChannelMutation,
+} = channelsApi;
+
+export const {
   useGetMessagesQuery,
   useAddMessageMutation,
   useEditMessageMutation,
   useRemoveMessageMutation,
+} = messagesApi;
+
+export default {
+  channelsApi,
+  messagesApi,
 };
