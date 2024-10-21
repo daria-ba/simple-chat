@@ -11,7 +11,7 @@ import {
   Container,
   Card,
   Row,
-  Col
+  Col,
 } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import ChatNavbar from './chat/ChatNavbar';
@@ -144,8 +144,8 @@ const RegistrationForm = () => {
                       <Form.Label htmlFor="confirmPassword">{t('signupPage.confirm')}</Form.Label>
                       <Form.Control.Feedback type="invalid" tooltip>
                         {registrationFailed
-                        ? t('signupPage.alreadyExists')
-                        : t(formik.errors.confirmPassword)}
+                          ? t('signupPage.alreadyExists')
+                          : t(formik.errors.confirmPassword)}
                       </Form.Control.Feedback>
                     </Form.Group>
 
@@ -166,6 +166,5 @@ const RegistrationForm = () => {
     </div>
   );
 };
-
 
 export default RegistrationForm;

@@ -13,7 +13,7 @@ const App = () => (
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<PrivateRoute />}>
-      <Route path="/" element={<div><ChatLayout /></div>} />
+        <Route path="/" element={<div><ChatLayout /></div>} />
       </Route>
       <Route path="/login" element={<div><Authorisation /></div>} />
       <Route path="/signup" element={<div><RegistrationForm /></div>} />

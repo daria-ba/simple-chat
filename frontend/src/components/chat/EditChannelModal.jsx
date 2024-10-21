@@ -87,14 +87,14 @@ const EditChannelModal = ({ show, handleClose, actualChannel }) => {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
-        {t('modal.cancel')}
+          {t('modal.cancel')}
         </Button>
         <Button variant="primary" onClick={formik.handleSubmit}>
-        {t('modal.submit')}
+          {t('modal.submit')}
         </Button>
       </Modal.Footer>
     </Modal>
   );
 };
 
-  export default EditChannelModal;
+export default EditChannelModal;

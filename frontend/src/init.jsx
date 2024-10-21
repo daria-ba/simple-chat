@@ -7,7 +7,7 @@ import leoProfanity from 'leo-profanity';
 import store from './store/store.js';
 import App from './components/App.jsx';
 import socket from './socket.js';
-import resources from '../src/locales/index.js'
+import resources from './locales/index.js';
 
 const rollbarConfig = {
   accessToken: process.env.REACT_APP_ROLLBAR_ACCESS_TOKEN,
@@ -20,8 +20,8 @@ const init = async () => {
   await i18n
     .use(initReactI18next)
     .init({
-    resources,
-    fallbackLng: 'ru',
+      resources,
+      fallbackLng: 'ru',
     });
 
   socket(store);
@@ -36,7 +36,7 @@ const init = async () => {
         </Provider>
       </ErrorBoundary>
     </RollbarProvider>
-  )
+  );
 };
 
 export default init;

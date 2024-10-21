@@ -85,9 +85,9 @@ const ChatSidebar = () => {
   return (
     <>
       <div className="border-end px-0 bg-light d-flex flex-column h-100">
-       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
-        <b>{t('channel.channels')}</b>
-        <Button
+        <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
+         <b>{t('channel.channels')}</b>
+         <Button
           className="p-0"
           variant="p-0 text-primary btn btn-group-vertical"
           aria-label={t('channel.add')}
@@ -102,25 +102,25 @@ const ChatSidebar = () => {
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: '17px',
-            padding: 0
+            padding: 0,
           }}
           onClick={handleShowModal}
         >
           +
         </Button>
-        <AddChannelModal show={showModal} channels={channels} handleClose={handleCloseModal} />
-      </div>
-      <ul className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
+         <AddChannelModal show={showModal} channels={channels} handleClose={handleCloseModal} />
+        </div>
+        <ul className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
         {channels && channels.map((channel) => (
           <li className="nav-item w-100" key={channel.id}>
             <div className="d-flex dropdown btn-group">
               <Button
-              type="button"
-              key={channel.id}
-              onClick={() => handleSelectChannel(channel.id)}
-              variant={channel.id === currentChannelId ? 'secondary' : ''}
-              className="w-100 rounded-0 text-start text-truncate"
-              aria-label={channel.name}
+                type="button"
+                key={channel.id}
+                onClick={() => handleSelectChannel(channel.id)}
+                variant={channel.id === currentChannelId ? 'secondary' : ''}
+                className="w-100 rounded-0 text-start text-truncate"
+                aria-label={channel.name}
               >
               <span className="me-1">#</span>
               {channel.name}
@@ -138,7 +138,7 @@ const ChatSidebar = () => {
                   </span>
                 </Button>
               )}
-              </div>
+            </div>
             {channel.removable && showDropdown === channel.id && (
               <div style={{ position: 'relative' }}>
                 <Dropdown
@@ -152,10 +152,10 @@ const ChatSidebar = () => {
                   }}
                 >
                   <Dropdown.Item as="button" size="sm" onClick={() => handleOpenEditModal(channel.id)}>
-                  {t('channel.rename')}
+                    {t('channel.rename')}
                   </Dropdown.Item>
                   <Dropdown.Item as="button" size="sm" onClick={() => handleDeleteChannel(channel.id)}>
-                  {t('channel.remove')}
+                    {t('channel.remove')}
                   </Dropdown.Item>
                 </Dropdown>
               </div>
@@ -163,13 +163,13 @@ const ChatSidebar = () => {
           </li>
         ))}
       </ul>
-    </div>
+      </div>
 
-    <EditChannelModal
-        show={showEditModal}
-        channels={channels}
-        handleClose={handleCloseEditModal}
-        actualChannel={currentChannel} />
+      <EditChannelModal
+      show={showEditModal}
+      channels={channels}
+      handleClose={handleCloseEditModal}
+      actualChannel={currentChannel} />
       <Modal
         show={showDeleteModal}
         onHide={handleCloseDeleteModal}

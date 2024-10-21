@@ -9,7 +9,7 @@ import {
   Container,
   Card,
   Row,
-  Col
+  Col,
 } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
@@ -99,7 +99,7 @@ const LoginForm = () => {
                       )}
                     </Form.Group>
                     <Form.Group className="form-floating mb-4">
-                        <Form.Control
+                      <Form.Control
                         type="password"
                         name="password"
                         id="password"
@@ -107,16 +107,14 @@ const LoginForm = () => {
                         autoComplete="current-password"
                         value={formik.values.password}
                         onChange={formik.handleChange}
-                        isInvalid={loginFailed}
-                      />
-                          <Form.Label htmlFor="password">{t('loginPage.password')}</Form.Label>
-                          {loginFailed && (
-                          <Form.Control.Feedback type="invalid" tooltip>
-                            {t('loginPage.loginFailed')}
-                          </Form.Control.Feedback>
-                          )}
+                        isInvalid={loginFailed} />
+                      <Form.Label htmlFor="password">{t('loginPage.password')}</Form.Label>
+                      {loginFailed && (
+                        <Form.Control.Feedback type="invalid" tooltip>
+                          {t('loginPage.loginFailed')}
+                        </Form.Control.Feedback>
+                      )}
                         </Form.Group>
-
                         <Button
                           className="w-100 mb-3"
                           variant="outline-secondary"
