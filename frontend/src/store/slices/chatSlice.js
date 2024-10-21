@@ -16,41 +16,35 @@ const chatSlice = createSlice({
       newState.error = null;
     },
     getChannelsSuccess: (state, action) => {
-      const newState = { ...state };
-      newState.isLoading = false;
-      newState.channels = action.payload;
+      state.isLoading = false;
+      state.channels = action.payload;
     },
     getChannelsFailure: (state, action) => {
-      const newState = { ...state };
-      newState.isLoading = false;
-      newState.error = action.payload;
+      state.isLoading = false;
+      state.error = action.payload;
     },
     addChannelSuccess: (state, action) => {
-      const newState = { ...state };
       const channelIdtoAdd = action.payload;
-      newState.channels.push(action.payload);
-      if (newState.currentChannelId !== channelIdtoAdd.id) {
-        newState.currentChannelId = channelIdtoAdd.id;
+      state.channels.push(action.payload);
+      if (state.currentChannelId !== channelIdtoAdd.id) {
+        state.currentChannelId = channelIdtoAdd.id;
       }
     },
     editChannelSuccess: (state, action) => {
-      const newState = { ...state };
-      const exists = newState.channels.find(channel => channel.id === action.payload.id);
+      const exists = state.channels.find(channel => channel.id === action.payload.id);
       if (!exists) {
-        newState.channels.push(action.payload);
+        state.channels.push(action.payload);
       }
     },
     deleteChannelSuccess: (state, action) => {
-      const newState = { ...state };
       const channelIdToDelete = action.payload;
-      newState.channels = state.channels.filter(channel => channel.id !== channelIdToDelete);
-      if (newState.currentChannelId === channelIdToDelete) {
-        newState.currentChannelId = '1';
+      state.channels = state.channels.filter(channel => channel.id !== channelIdToDelete);
+      if (state.currentChannelId === channelIdToDelete) {
+        state.currentChannelId = '1';
       }
     },
     setActiveChannel: (state, action) => {
-      const newState = { ...state };
-      newState.currentChannelId = action.payload;
+      state.currentChannelId = action.payload;
     },
   },
 });
