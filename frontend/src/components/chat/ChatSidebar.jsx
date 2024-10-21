@@ -1,16 +1,16 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchChannels, deleteChannel, setActiveChannel } from '../../store/slices/chatSlice';
 import React, { useEffect, useState, useRef } from 'react';
 import { Button, Dropdown, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import AddChannelModal from './AddChannelModal';
 import { toast } from 'react-toastify';
+import AddChannelModal from './AddChannelModal';
+import { fetchChannels, deleteChannel, setActiveChannel } from '../../store/slices/chatSlice';
 import { useGetChannelsQuery } from '../../store/middlewares/index';
 import EditChannelModal from './EditChannelModal';
 
 const ChatSidebar = () => {
   const dispatch = useDispatch();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [showDropdown, setShowDropdown] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -23,8 +23,8 @@ const ChatSidebar = () => {
 
   useEffect(() => {
     if (!isLoading && channels === undefined) {
-    dispatch(fetchChannels());
-  }
+      dispatch(fetchChannels());
+    }
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setShowDropdown(false);
@@ -32,7 +32,7 @@ const ChatSidebar = () => {
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
-    document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [channels, isLoading, dispatch]);
 
@@ -84,25 +84,25 @@ const ChatSidebar = () => {
 
   return (
     <>
-       <div className="border-end px-0 bg-light d-flex flex-column h-100">
+      <div className="border-end px-0 bg-light d-flex flex-column h-100">
        <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
         <b>{t('channel.channels')}</b>
         <Button
           className="p-0"
           variant="p-0 text-primary btn btn-group-vertical"
           aria-label={t('channel.add')}
-          style={{ 
-            width: '20px', 
-            height: '20px', 
-            border: '1px solid #007bff', 
-            borderRadius: '2px', 
-            backgroundColor: 'clear', 
-            color: '#007bff', 
-            display: 'inline-flex', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            fontSize: '17px', 
-            padding: 0 
+          style={{
+            width: '20px',
+            height: '20px',
+            border: '1px solid #007bff',
+            borderRadius: '2px',
+            backgroundColor: 'clear',
+            color: '#007bff',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '17px',
+            padding: 0
           }}
           onClick={handleShowModal}
         >
@@ -114,14 +114,14 @@ const ChatSidebar = () => {
         {channels && channels.map((channel) => (
           <li className="nav-item w-100" key={channel.id}>
             <div className="d-flex dropdown btn-group">
-            <Button
+              <Button
               type="button"
               key={channel.id}
               onClick={() => handleSelectChannel(channel.id)}
               variant={channel.id === currentChannelId ? 'secondary' : ''}
               className="w-100 rounded-0 text-start text-truncate"
               aria-label={channel.name}
-            >
+              >
               <span className="me-1">#</span>
               {channel.name}
               </Button>
@@ -131,10 +131,11 @@ const ChatSidebar = () => {
                   className="flex-grow-0 dropdown-toggle dropdown-toggle-split"
                   variant={channel.id === currentChannelId ? 'secondary' : ''}
                   aria-expanded="false"
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: 'pointer' }}
                   onClick={(e) => handleToggleDropdown(e, channel.id)}>
-                   <span className="visually-hidden">{t('channel.menu')}
-                   </span>
+                  <span className="visually-hidden">
+                    {t('channel.menu')}
+                  </span>
                 </Button>
               )}
               </div>
@@ -164,11 +165,11 @@ const ChatSidebar = () => {
       </ul>
     </div>
 
-      <EditChannelModal
-          show={showEditModal}
-          channels={channels}
-          handleClose={handleCloseEditModal}
-          actualChannel={currentChannel} />
+    <EditChannelModal
+        show={showEditModal}
+        channels={channels}
+        handleClose={handleCloseEditModal}
+        actualChannel={currentChannel} />
       <Modal
         show={showDeleteModal}
         onHide={handleCloseDeleteModal}
@@ -188,7 +189,7 @@ const ChatSidebar = () => {
             <p className="lead">{t('modal.confirmation')}</p>
             <div className="d-flex justify-content-end">
               <Button variant="secondary" onClick={handleCloseDeleteModal}>
-              {t('modal.cancel')}
+                {t('modal.cancel')}
               </Button>
               <Button
                 variant="danger"

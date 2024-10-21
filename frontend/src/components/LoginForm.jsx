@@ -3,7 +3,14 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
-import { Button, Form, Container, Card, Row, Col } from 'react-bootstrap';
+import {
+  Button,
+  Form,
+  Container,
+  Card,
+  Row,
+  Col
+} from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { loginUser } from '../api/api.js';
@@ -29,7 +36,7 @@ const LoginForm = () => {
       password: '',
     },
     validationSchema: authSchema,
-    onSubmit: async(values) => {
+    onSubmit: async (values) => {
       try {
         const response = await loginUser({
           username: values.username,
@@ -40,10 +47,10 @@ const LoginForm = () => {
         dispatch(setAuthData({ token, username }));
         dispatch(login({ token, username }));
         navigate('/');
-        } catch (error) {
-          console.error('Ошибка входа', error);
-          setLoginFailed(true);
-        }
+      } catch (error) {
+        console.error('Ошибка входа', error);
+        setLoginFailed(true);
+      }
     },
   });
 
@@ -57,7 +64,6 @@ const LoginForm = () => {
       inputRef.current.select();
     }
   }, [loginFailed]);
-
 
   return (
     <div className="d-flex flex-column h-100 bg-light">
@@ -85,15 +91,15 @@ const LoginForm = () => {
                         onChange={formik.handleChange}
                         isInvalid={loginFailed}
                       />
-                        <Form.Label htmlFor="username">{t('loginPage.username')}</Form.Label>
-                        {!loginFailed && (
+                      <Form.Label htmlFor="username">{t('loginPage.username')}</Form.Label>
+                      {!loginFailed && (
                         <Form.Control.Feedback type="invalid" tooltip>
                           {t('loginPage.loginFailed')}
                         </Form.Control.Feedback>
-                        )}
-                        </Form.Group>
-                        <Form.Group className="form-floating mb-4">
-                      <Form.Control
+                      )}
+                    </Form.Group>
+                    <Form.Group className="form-floating mb-4">
+                        <Form.Control
                         type="password"
                         name="password"
                         id="password"
@@ -135,6 +141,5 @@ const LoginForm = () => {
     </div>
   );
 };
-
 
 export default LoginForm;

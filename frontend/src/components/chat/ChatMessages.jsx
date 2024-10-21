@@ -1,24 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useGetChannelsQuery } from '../../store/middlewares/index';
-import { useGetMessagesQuery } from '../../store/middlewares/index';
-import MessageInput from './MessageInput';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useGetChannelsQuery, useGetMessagesQuery } from '../../store/middlewares/index';
+import MessageInput from './MessageInput';
 
 const ChatMessages = () => {
   const { currentChannelId } = useSelector((state) => state.channels);
   const navigate = useNavigate();
-  const {t} = useTranslation();
-  const { data: channels } = useGetChannelsQuery()
+  const { t } = useTranslation();
+  const { data: channels } = useGetChannelsQuery();
   const { data: messages, error } = useGetMessagesQuery();
 
   useEffect(() => {
-  if (error?.status === 401) {
-    navigate('/login');
-  }
-}, [error, navigate]); 
+    if (error?.status === 401) {
+      navigate('/login');
+    }
+  }, [error, navigate]);
 
   const channel = channels?.find(({ id }) => id === currentChannelId);
   const filteredMessages = messages?.filter((message) => message.channelId === currentChannelId);
@@ -34,17 +32,18 @@ const ChatMessages = () => {
         <div id="messages-box" className="chat-messages overflow-auto px-5">
           {filteredMessages?.map((message) => (
             <div key={message.id}>
-              <b>{message.username}</b>{': '}
+              <b>{message.username}</b>
+              {': '}
               {message.body}
             </div>
           ))}
         </div>
         <div className="mt-auto px-5 py-3">
-        <MessageInput />
+          <MessageInput />
         </div>
-        </div>
+      </div>
     </>
-  )
+  );
 };
 
 export default ChatMessages;

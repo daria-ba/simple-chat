@@ -41,7 +41,6 @@ const chatSlice = createSlice({
       if (state.currentChannelId === channelIdToDelete) {
         state.currentChannelId = '1';
       }
-
     },
     setActiveChannel: (state, action) => {
       state.currentChannelId = action.payload;
@@ -51,7 +50,7 @@ const chatSlice = createSlice({
 
 export const {
   getChannelsStart, getChannelsSuccess, getChannelsFailure,
-  addChannelSuccess, editChannelSuccess, deleteChannelSuccess, setActiveChannel
+  addChannelSuccess, editChannelSuccess, deleteChannelSuccess, setActiveChannel,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;
@@ -91,7 +90,7 @@ export const editChannel = (editedChannel) => async (dispatch) => {
   try {
     const user = localStorage.getItem('user');
     const token = JSON.parse(user)?.token;
-    const response = await axios.put(`/api/v1/channels`, editedChannel, {
+    const response = await axios.put('/api/v1/channels', editedChannel, {
       headers: { Authorization: `Bearer ${token}` },
     });
     dispatch(editChannelSuccess(response.data));

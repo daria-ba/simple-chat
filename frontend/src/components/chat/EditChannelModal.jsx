@@ -5,28 +5,27 @@ import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
-import { useEditChannelMutation } from '../../store/middlewares';
-import { useGetChannelsQuery } from '../../store/middlewares/index';
 import leoProfanity from 'leo-profanity';
+import { useGetChannelsQuery, useEditChannelMutation } from '../../store/middlewares/index';
 
 const EditChannelModal = ({ show, handleClose, actualChannel }) => {
   const inputRef = useRef(null);
   const { data: channels } = useGetChannelsQuery();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
-  const currentChannel = channels.find(channel => channel.id === actualChannel);
+  const currentChannel = channels.find((channel) => channel.id === actualChannel);
   const [editChannel] = useEditChannelMutation();
 
   const channelNames = channels
-  .filter(channel => channel.removable === true)
-  .map(channel => channel.name);
+    .filter((channel) => channel.removable === true)
+    .map((channel) => channel.name);
 
   const validationSchema = Yup.object({
     channelName: Yup.string()
-    .min(3, `${t('validation.min_max')}`)
-    .max(20, `${t('validation.min_max')}`)
-    .notOneOf(channelNames, `${t('validation.uniq')}`)
-    .required(`${t('validation.required')}`),
+      .min(3, `${t('validation.min_max')}`)
+      .max(20, `${t('validation.min_max')}`)
+      .notOneOf(channelNames, `${t('validation.uniq')}`)
+      .required(`${t('validation.required')}`),
   });
 
   const formik = useFormik({
@@ -37,7 +36,10 @@ const EditChannelModal = ({ show, handleClose, actualChannel }) => {
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
-        const editedChannel = { id: currentChannel.id, name: leoProfanity.clean(values.channelName) };
+        const editedChannel = {
+          id: currentChannel.id,
+          name: leoProfanity.clean(values.channelName),
+        };
         const data = await editChannel(editedChannel).unwrap();
         resetForm();
         handleClose();
@@ -94,5 +96,5 @@ const EditChannelModal = ({ show, handleClose, actualChannel }) => {
     </Modal>
   );
 };
-  
+
   export default EditChannelModal;

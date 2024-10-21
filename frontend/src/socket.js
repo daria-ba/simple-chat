@@ -10,26 +10,26 @@ const socket = (store) => {
     store.dispatch(messagesApi.util.updateQueryData('getMessages', undefined, (draftMessages) => {
       draftMessages.push(payload);
     }));
-    });
+  });
 
   socket.on('newChannel', (payload) => {
-      store.dispatch(channelsApi.util.updateQueryData('getChannels', undefined, (draftChannels) => {
+    store.dispatch(channelsApi.util.updateQueryData('getChannels', undefined, (draftChannels) => {
       draftChannels.push(payload);
     }));
   });
 
   socket.on('removeChannel', (payload) => {
-      store.dispatch(channelsApi.util.updateQueryData('getChannels', undefined, (draftChannels) => {
-        const newChannels = draftChannels.filter((channel) => channel.id !== payload.id);
-        const state = store.getState();
-  
-        if (state.channels.currentChannelId === payload.id) {
-          store.dispatch(setActiveChannel('1'));
-        }
-  
-        return newChannels;
-      }));
-    });
+    store.dispatch(channelsApi.util.updateQueryData('getChannels', undefined, (draftChannels) => {
+      const newChannels = draftChannels.filter((channel) => channel.id !== payload.id);
+      const state = store.getState();
+
+      if (state.channels.currentChannelId === payload.id) {
+        store.dispatch(setActiveChannel('1'));
+      }
+
+      return newChannels;
+    }));
+  });
 
   socket.on('renameChannel', (payload) => {
     store.dispatch(channelsApi.util.updateQueryData('getChannels', undefined, (draftChannels) => {
@@ -41,4 +41,5 @@ const socket = (store) => {
     }));
   });
 };
+
 export default socket;
