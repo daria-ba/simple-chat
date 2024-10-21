@@ -3,15 +3,15 @@ import { useSelector } from 'react-redux';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
-import { useAddMessageMutation } from '../../store/middlewares/messagesApi';
 import leoProfanity from 'leo-profanity';
+import { useAddMessageMutation } from '../../store/middlewares/index';
 
 const MessageInput = () => {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const { currentChannelId } = useSelector((state) => state.channels);
   const username = useSelector((state) => state.auth.username);
   const inputRef = useRef(null);
-  
+
   const [addMessage, { isLoading }] = useAddMessageMutation();
 
   const formik = useFormik({
@@ -54,7 +54,7 @@ const MessageInput = () => {
             value={formik.values.message}
             disabled={isLoading}
             placeholder={t('message.enterMessage')}
-            aria-label="new Message"
+            aria-label={t('message.newMessage')}
             autoComplete="off"
           />
           <Button

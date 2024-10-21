@@ -1,15 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useFormik } from "formik";
-import { Button, Form, Container, Card, Row, Col } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import axios from 'axios';
-import { useTranslation } from 'react-i18next';
-import { setAuthData, login } from '../store/slices/authSlice';
-import { useDispatch } from 'react-redux';
-import ChatNavbar from './chat/ChatNavbar';
 import leoProfanity from 'leo-profanity';
-import regImg from '../assets/img/signup.jpg'
+import { useFormik } from 'formik';
+import {
+  Button,
+  Form,
+  Container,
+  Card,
+  Row,
+  Col,
+} from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import ChatNavbar from './chat/ChatNavbar';
+import regImg from '../assets/img/signup.jpg';
+import { setAuthData, login } from '../store/slices/authSlice';
 
 const RegistrationForm = () => {
   const [registrationFailed, setRegistrationFailed] = useState(false);
@@ -43,26 +50,26 @@ const RegistrationForm = () => {
       confirmPassword: '',
     },
     validationSchema: signupSchema,
-    onSubmit: async(values) => {
+    onSubmit: async (values) => {
       try {
-        const response = await axios.post('/api/v1/signup', { 
-          username: leoProfanity.clean(values.username), 
-          password: values.password 
+        const response = await axios.post('/api/v1/signup', {
+          username: leoProfanity.clean(values.username),
+          password: values.password,
         });
         const { token, username } = response.data;
         dispatch(setAuthData({ token, username }));
         dispatch(login({ token, username }));
         navigate('/');
       } catch (error) {
-        console.error("Ошибка регистрации", error);
+        console.error('Ошибка регистрации', error);
         setRegistrationFailed(true);
       }
-    }
+    },
   });
 
   useEffect(() => {
     if (inputRef.current) {
-    inputRef.current.focus();
+      inputRef.current.focus();
     }
     if (registrationFailed) {
       inputRef.current.focus();
@@ -94,7 +101,7 @@ const RegistrationForm = () => {
                         ref={inputRef}
                         value={formik.values.username}
                         onChange={formik.handleChange}
-                        isInvalid={formik.touched.username && formik.errors.username || registrationFailed}
+                        isInvalid={formik.touched.username || registrationFailed}
                       />
                       <Form.Label htmlFor="username">{t('signupPage.username')}</Form.Label>
                       {!registrationFailed && (
@@ -113,7 +120,7 @@ const RegistrationForm = () => {
                         autoComplete="current-password"
                         value={formik.values.password}
                         onChange={formik.handleChange}
-                        isInvalid={formik.touched.password && formik.errors.password || registrationFailed}
+                        isInvalid={formik.touched.password || registrationFailed}
                       />
                       <Form.Label htmlFor="password">{t('signupPage.password')}</Form.Label>
                       {!registrationFailed && (
@@ -132,13 +139,13 @@ const RegistrationForm = () => {
                         autoComplete="confirmPassword"
                         value={formik.values.confirmPassword}
                         onChange={formik.handleChange}
-                        isInvalid={formik.touched.confirmPassword && formik.errors.confirmPassword || registrationFailed}
+                        isInvalid={formik.touched.confirmPassword || registrationFailed}
                       />
                       <Form.Label htmlFor="confirmPassword">{t('signupPage.confirm')}</Form.Label>
                       <Form.Control.Feedback type="invalid" tooltip>
-                      {registrationFailed
-                      ? t('signupPage.alreadyExists')
-                      : t(formik.errors.confirmPassword)}
+                        {registrationFailed
+                          ? t('signupPage.alreadyExists')
+                          : t(formik.errors.confirmPassword)}
                       </Form.Control.Feedback>
                     </Form.Group>
 
@@ -159,6 +166,5 @@ const RegistrationForm = () => {
     </div>
   );
 };
-
 
 export default RegistrationForm;

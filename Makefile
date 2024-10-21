@@ -8,7 +8,7 @@ start-frontend:
 	make -C frontend start
 
 start-backend:
-	npx start-server
+	npx start-server -s ./frontend/build
 
 deploy:
 	git push heroku main
@@ -20,13 +20,6 @@ develop:
 	make start-backend & make start-frontend
 
 build:
-	rm -rf frontend/build
+	rm -rf .frontend/build
 	npm run build
-
-set-locale:
-	export LANG=ru_RU.UTF-8
-
-check-main-link:
-	echo "Ensure there's a link to Hexlet Chat on every page."
-
-	prepare: install build
+	
