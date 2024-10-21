@@ -5,7 +5,7 @@ const messagesApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: '/api/v1/messages',
     prepareHeaders: (headers, { getState }) => {
-      const token = getState().auth.token;
+      const { token } = getState().auth;
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);
       }
@@ -19,12 +19,10 @@ const messagesApi = createApi({
       providesTags: ['Messages'],
     }),
     addMessage: builder.mutation({
-      query: (params) => {
-        return {
+      query: (params) => ({
           method: 'POST',
           body: params,
-        };
-      },
+      }),
       invalidatesTags: ({ channelId }) => [{ type: 'Messages', id: channelId }],
     }),
     deleteMessage: builder.mutation({

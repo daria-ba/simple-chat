@@ -24,7 +24,7 @@ const init = async () => {
       fallbackLng: 'ru',
     });
 
-    socketIo(store);
+  socketIo(store);
 
   return (
     <RollbarProvider config={rollbarConfig}>
