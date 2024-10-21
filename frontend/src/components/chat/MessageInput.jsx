@@ -4,7 +4,7 @@ import { Form, InputGroup, Button } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import leoProfanity from 'leo-profanity';
-import { useAddMessageMutation } from '../../store/middlewares/messagesApi';
+import { useAddMessageMutation } from '../../store/middlewares/index';
 
 const MessageInput = () => {
   const { t } = useTranslation();
