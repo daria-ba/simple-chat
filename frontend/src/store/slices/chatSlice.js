@@ -18,12 +18,12 @@ const chatSlice = createSlice({
     getChannelsSuccess: (state, action) => {
       const newState = { ...state };
       newState.isLoading = false;
-      newState.channels = action.payload;
+      state.channels = action.payload;
     },
     getChannelsFailure: (state, action) => {
       const newState = { ...state };
       newState.isLoading = false;
-      newState.error = action.payload;
+      state.error = action.payload;
     },
     addChannelSuccess: (state, action) => {
       const channelIdtoAdd = action.payload;
@@ -39,9 +39,8 @@ const chatSlice = createSlice({
       }
     },
     deleteChannelSuccess: (state, action) => {
-      const newState = { ...state };
       const channelIdToDelete = action.payload;
-      newState.channels = state.channels.filter((channel) => channel.id !== channelIdToDelete);
+      state.channels = state.channels.filter((channel) => channel.id !== channelIdToDelete);
       if (state.currentChannelId === channelIdToDelete) {
         state.currentChannelId = '1';
       }
