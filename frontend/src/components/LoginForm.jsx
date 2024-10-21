@@ -13,7 +13,7 @@ import {
 } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
-import { loginUser } from '../api/api.js';
+import loginUser from '../api/api.js';
 import ChatNavbar from './chat/ChatNavbar.jsx';
 import loginImg from '../assets/img/login.jpeg';
 import { setAuthData, login } from '../store/slices/authSlice';
@@ -115,14 +115,14 @@ const LoginForm = () => {
                           {t('loginPage.loginFailed')}
                         </Form.Control.Feedback>
                       )}
-                        </Form.Group>
-                        <Button
-                          className="w-100 mb-3"
-                          variant="outline-secondary"
-                          type="submit"
-                        >
-                          {t('loginPage.submitBtn')}
-                        </Button>
+                    </Form.Group>
+                    <Button
+                      className="w-100 mb-3"
+                      variant="outline-secondary"
+                      type="submit"
+                    >
+                      {t('loginPage.submitBtn')}
+                    </Button>
                   </Form>
                 </Col>
               </Card.Body>

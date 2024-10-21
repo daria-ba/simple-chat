@@ -103,11 +103,11 @@ const ChatSidebar = () => {
               justifyContent: 'center',
               fontSize: '17px',
               padding: 0,
-          }}
-          onClick={handleShowModal}
-          >
-          +
-        </Button>
+            }}
+            onClick={handleShowModal}
+            >
+              +
+          </Button>
           <AddChannelModal show={showModal} channels={channels} handleClose={handleCloseModal} />
       </div>
         <ul className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">

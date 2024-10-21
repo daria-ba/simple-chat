@@ -69,15 +69,15 @@ const AddChannelModal = ({ show, handleClose }) => {
         <Form onSubmit={formik.handleSubmit}>
           <Form.Group>
             <Form.Label htmlFor="name" visuallyHidden>{t('channel.channelName')}</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter channel name"
-                name="channelName"
-                ref={inputRef}
-                value={formik.values.channelName}
-                onChange={formik.handleChange}
-                isInvalid={!!formik.errors.channelName}
-              />
+            <Form.Control
+              type="text"
+              placeholder="Enter channel name"
+              name="channelName"
+              ref={inputRef}
+              value={formik.values.channelName}
+              onChange={formik.handleChange}
+              isInvalid={!!formik.errors.channelName}
+            />
             <Form.Control.Feedback type="invalid">
               {formik.errors.channelName}
             </Form.Control.Feedback>
@@ -88,8 +88,7 @@ const AddChannelModal = ({ show, handleClose }) => {
         <Button variant="secondary" onClick={handleClose}>
           Закрыть
         </Button>
-        <Button variant="primary"
-          onClick={formik.handleSubmit}>
+        <Button variant="primary" onClick={formik.handleSubmit}>
           Добавить чат
         </Button>
       </Modal.Footer>
