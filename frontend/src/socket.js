@@ -7,6 +7,7 @@ const socketIo = (store) => {
   const socket = io();
 
   socket.on('newMessage', (payload) => {
+    console.log(payload);
     store.dispatch(messagesApi.util.updateQueryData('getMessages', undefined, (draftMessages) => {
       draftMessages.push(payload);
     }));
