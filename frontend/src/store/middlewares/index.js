@@ -1,4 +1,3 @@
-/* eslint-disable import/no-named-as-default-member */
 import channelsApi from './channelsApi.js';
 import messagesApi from './messagesApi.js';
 
