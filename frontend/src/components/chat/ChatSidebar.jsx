@@ -105,13 +105,13 @@ const ChatSidebar = () => {
               padding: 0,
             }}
             onClick={handleShowModal}
-            >
+          >
               +
           </Button>
           <AddChannelModal show={showModal} channels={channels} handleClose={handleCloseModal} />
-      </div>
+        </div>
         <ul className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
-        {channels && channels.map((channel) => (
+          {channels && channels.map((channel) => (
           <li className="nav-item w-100" key={channel.id}>
             <div className="d-flex dropdown btn-group">
               <Button
@@ -122,8 +122,8 @@ const ChatSidebar = () => {
                 className="w-100 rounded-0 text-start text-truncate"
                 aria-label={channel.name}
               >
-              <span className="me-1">#</span>
-              {channel.name}
+                <span className="me-1">#</span>
+                {channel.name}
               </Button>
               {channel.removable && (
                 <Button
@@ -132,7 +132,8 @@ const ChatSidebar = () => {
                   variant={channel.id === currentChannelId ? 'secondary' : ''}
                   aria-expanded="false"
                   style={{ cursor: 'pointer' }}
-                  onClick={(e) => handleToggleDropdown(e, channel.id)}>
+                  onClick={(e) => handleToggleDropdown(e, channel.id)}
+                >
                   <span className="visually-hidden">
                     {t('channel.menu')}
                   </span>
@@ -161,15 +162,16 @@ const ChatSidebar = () => {
               </div>
             )}
           </li>
-        ))}
-      </ul>
-    </div>
+          ))}
+        </ul>
+      </div>
 
-      <EditChannelModal
-      show={showEditModal}
-      channels={channels}
-      handleClose={handleCloseEditModal}
-      actualChannel={currentChannel} />
+        <EditChannelModal
+        show={showEditModal}
+        channels={channels}
+        handleClose={handleCloseEditModal}
+        actualChannel={currentChannel}
+        />
       <Modal
         show={showDeleteModal}
         onHide={handleCloseDeleteModal}

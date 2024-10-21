@@ -20,8 +20,8 @@ const messagesApi = createApi({
     }),
     addMessage: builder.mutation({
       query: (params) => ({
-          method: 'POST',
-          body: params,
+        method: 'POST',
+        body: params,
       }),
       invalidatesTags: ({ channelId }) => [{ type: 'Messages', id: channelId }],
     }),
