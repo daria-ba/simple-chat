@@ -11,11 +11,11 @@ import { setActiveChannel } from '../../store/slices/chatSlice';
 import { useGetChannelsQuery, useEditChannelMutation, useAddChannelMutation } from '../../store/middlewares/index';
 
 const ModalElements = ({
-    show,
-    close,
-    type,
-    currentChannel,
-    confirmDeleteChannel
+  show,
+  close,
+  type,
+  currentChannel,
+  confirmDeleteChannel,
 }) => {
   const inputRef = useRef(null);
   const dispatch = useDispatch();
@@ -160,7 +160,7 @@ const ModalElements = ({
           )}
           <div className="mt-2 d-flex justify-content-end">
             <Button className="me-2" variant="secondary" onClick={close}>
-            {t('modal.cancel')}
+              {t('modal.cancel')}
             </Button>
             {type === 'delete' ? (
               <Button variant="danger" onClick={confirmDeleteChannel}>
