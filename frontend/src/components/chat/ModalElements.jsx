@@ -10,7 +10,13 @@ import leoProfanity from 'leo-profanity';
 import { setActiveChannel } from '../../store/slices/chatSlice';
 import { useGetChannelsQuery, useEditChannelMutation, useAddChannelMutation } from '../../store/middlewares/index';
 
-const ModalElements = ( { show, close, type, currentChannel, confirmDeleteChannel } ) => {
+const ModalElements = ({
+    show,
+    close,
+    type,
+    currentChannel,
+    confirmDeleteChannel
+}) => {
   const inputRef = useRef(null);
   const dispatch = useDispatch();
   const { data: channels } = useGetChannelsQuery();
@@ -152,22 +158,20 @@ const ModalElements = ( { show, close, type, currentChannel, confirmDeleteChanne
               </Form.Group>
             </Form>
           )}
-            <div className="mt-2 d-flex justify-content-end">
-              <Button className="me-2" variant="secondary" onClick={close}>
-                {t('modal.cancel')}
+          <div className="mt-2 d-flex justify-content-end">
+            <Button className="me-2" variant="secondary" onClick={close}>
+            {t('modal.cancel')}
+            </Button>
+            {type === 'delete' ? (
+              <Button variant="danger" onClick={confirmDeleteChannel}>
+                {t('modal.confirm')}
               </Button>
-              {type === 'delete'
-                ?
-                (<Button variant="danger" onClick={confirmDeleteChannel}>
-                  {t('modal.confirm')}
-                </Button>)
-                :
-                (<Button variant="primary" onClick={formik.handleSubmit}>
-                  {t('modal.submit')}
-                </Button>)
-
-              }
-            </div>
+            ) : (
+              <Button variant="primary" onClick={formik.handleSubmit}>
+                {t('modal.submit')}
+              </Button>
+            )}
+          </div>
         </Modal.Body>
       </div>
     </Modal>
