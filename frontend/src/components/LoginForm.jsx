@@ -16,7 +16,7 @@ import * as Yup from 'yup';
 import loginUser from '../api/api.js';
 import ChatNavbar from './chat/ChatNavbar.jsx';
 import loginImg from '../assets/img/login.jpeg';
-import { setAuthData, login } from '../store/slices/authSlice';
+import { login } from '../store/slices/authSlice';
 
 const LoginForm = () => {
   const { t } = useTranslation();

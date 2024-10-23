@@ -4,15 +4,13 @@ import React, { useEffect, useRef } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { setActiveChannel } from '../../store/slices/chatSlice';
-import { useGetChannelsQuery, useEditChannelMutation, useAddChannelMutation } from '../../store/middlewares/index';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import leoProfanity from 'leo-profanity';
+import { setActiveChannel } from '../../store/slices/chatSlice';
+import { useGetChannelsQuery, useEditChannelMutation, useAddChannelMutation } from '../../store/middlewares/index';
 
-
-const ModalElements = ({ show, close, type, currentChannel, confirmDeleteChannel }) => {
-
+const ModalElements = ( { show, close, type, currentChannel, confirmDeleteChannel } ) => {
   const inputRef = useRef(null);
   const dispatch = useDispatch();
   const { data: channels } = useGetChannelsQuery();
@@ -25,10 +23,10 @@ const ModalElements = ({ show, close, type, currentChannel, confirmDeleteChannel
 
   const validationSchema = Yup.object({
     channelName: Yup.string()
-    .min(3, `${t('validation.min_max')}`)
-    .max(20, `${t('validation.min_max')}`)
-    .notOneOf(channelsNames, `${t('validation.uniq')}`)
-    .required(`${t('validation.required')}`),
+      .min(3, `${t('validation.min_max')}`)
+      .max(20, `${t('validation.min_max')}`)
+      .notOneOf(channelsNames, `${t('validation.uniq')}`)
+      .required(`${t('validation.required')}`),
   });
 
   const createNotify = () => {
@@ -44,7 +42,7 @@ const ModalElements = ({ show, close, type, currentChannel, confirmDeleteChannel
   };
 
   const formik = useFormik({
-    initialValues: { 
+    initialValues: {
       channelName: type === 'edit' ? actualChannel?.name : '',
     },
     validationSchema,
@@ -75,7 +73,7 @@ const ModalElements = ({ show, close, type, currentChannel, confirmDeleteChannel
           if (data) {
             dispatch(setActiveChannel(data.id));
           }
-            createNotify();
+          createNotify();
         } catch (err) {
           console.error('Failed to add channel', err);
         }
@@ -86,7 +84,7 @@ const ModalElements = ({ show, close, type, currentChannel, confirmDeleteChannel
   });
 
   useEffect(() => {
-    if (show, type !== 'delete') {
+    if (show && type !== 'delete') {
       inputRef.current.focus();
       inputRef.current.select();
     }
@@ -114,9 +112,7 @@ const ModalElements = ({ show, close, type, currentChannel, confirmDeleteChannel
         </Modal.Header>
         <Modal.Body>
           { type === 'delete' && (
-            <>
-              <p className="lead">{t('modal.confirmation')}</p>
-            </>
+            <p className="lead">{t('modal.confirmation')}</p>
           )}
           { type === 'edit' && (
             <Form onSubmit={formik.handleSubmit}>
@@ -130,7 +126,7 @@ const ModalElements = ({ show, close, type, currentChannel, confirmDeleteChannel
                   onChange={formik.handleChange}
                   isInvalid={!!formik.errors.channelName}
                 />
-                <Form.Label className='visually-hidden'>{t('channel.editChannelName')}</Form.Label>
+                <Form.Label className="visually-hidden">{t('channel.editChannelName')}</Form.Label>
                 <Form.Control.Feedback type="invalid">
                   {formik.errors.channelName}
                 </Form.Control.Feedback>
@@ -156,26 +152,26 @@ const ModalElements = ({ show, close, type, currentChannel, confirmDeleteChannel
               </Form.Group>
             </Form>
           )}
-          <>
             <div className="mt-2 d-flex justify-content-end">
-              <Button className='me-2' variant="secondary" onClick={close}>
+              <Button className="me-2" variant="secondary" onClick={close}>
                 {t('modal.cancel')}
               </Button>
-              {type === 'delete' ?
-                <Button variant="danger" onClick={confirmDeleteChannel}>
+              {type === 'delete'
+                ?
+                (<Button variant="danger" onClick={confirmDeleteChannel}>
                   {t('modal.confirm')}
-                </Button>
+                </Button>)
                 :
-                <Button variant="primary" onClick={formik.handleSubmit}>
+                (<Button variant="primary" onClick={formik.handleSubmit}>
                   {t('modal.submit')}
-                </Button>
+                </Button>)
+
               }
             </div>
-          </>
         </Modal.Body>
       </div>
     </Modal>
-  )
+  );
 };
 
 export default ModalElements;
