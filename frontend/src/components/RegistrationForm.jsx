@@ -16,7 +16,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import ChatNavbar from './chat/ChatNavbar';
 import regImg from '../assets/img/signup.jpg';
-import { setAuthData, login } from '../store/slices/authSlice';
+import { setAuthData } from '../store/slices/authSlice';
 
 const RegistrationForm = () => {
   const [registrationFailed, setRegistrationFailed] = useState(false);
@@ -58,13 +58,14 @@ const RegistrationForm = () => {
         });
         const { token, username } = response.data;
         dispatch(setAuthData({ token, username }));
-        dispatch(login({ token, username }));
         navigate('/');
       } catch (error) {
         console.error('Ошибка регистрации', error);
         setRegistrationFailed(true);
       }
     },
+    validateOnBlur: true,
+    validateOnChange: false,
   });
 
   useEffect(() => {
@@ -101,7 +102,7 @@ const RegistrationForm = () => {
                         ref={inputRef}
                         value={formik.values.username}
                         onChange={formik.handleChange}
-                        isInvalid={formik.touched.username || registrationFailed}
+                        isInvalid={formik.errors.username || registrationFailed}
                       />
                       <Form.Label htmlFor="username">{t('signupPage.username')}</Form.Label>
                       {!registrationFailed && (
@@ -120,7 +121,7 @@ const RegistrationForm = () => {
                         autoComplete="current-password"
                         value={formik.values.password}
                         onChange={formik.handleChange}
-                        isInvalid={formik.touched.password || registrationFailed}
+                        isInvalid={formik.errors.password || registrationFailed}
                       />
                       <Form.Label htmlFor="password">{t('signupPage.password')}</Form.Label>
                       {!registrationFailed && (
@@ -139,7 +140,7 @@ const RegistrationForm = () => {
                         autoComplete="confirmPassword"
                         value={formik.values.confirmPassword}
                         onChange={formik.handleChange}
-                        isInvalid={formik.touched.confirmPassword || registrationFailed}
+                        isInvalid={formik.errors.confirmPassword || registrationFailed}
                       />
                       <Form.Label htmlFor="confirmPassword">{t('signupPage.confirm')}</Form.Label>
                       <Form.Control.Feedback type="invalid" tooltip>
