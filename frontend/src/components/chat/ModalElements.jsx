@@ -143,7 +143,7 @@ const ModalElements = ({ show, close, type, currentChannel, confirmDeleteChannel
                 <Form.Label htmlFor="name" visuallyHidden>{t('channel.channelName')}</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Enter channel name"
+                  placeholder={t('channel.addPlaceholder')}
                   name="channelName"
                   ref={inputRef}
                   value={formik.values.channelName}
