@@ -59,7 +59,7 @@ const MessageInput = () => {
           />
           <Button
             className="ms-1"
-            variant="outline-secondary"
+            variant=""
             type="submit"
             disabled={!formik.values.message || isLoading}
             aria-label="submit"

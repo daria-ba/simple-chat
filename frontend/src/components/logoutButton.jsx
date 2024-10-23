@@ -18,7 +18,7 @@ const LogoutButton = () => {
   return (
     <Button
       variant=""
-      className="flex-grow-0 border 2 black"
+      className="flex-grow-0 border 2 grey"
       onClick={handleLogout}
     >
       {t('Navigation.logout')}

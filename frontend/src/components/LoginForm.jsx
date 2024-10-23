@@ -43,8 +43,6 @@ const LoginForm = () => {
           password: values.password,
         });
         const { token, username } = response;
-        localStorage.setItem('user', JSON.stringify(response));
-        dispatch(setAuthData({ token, username }));
         dispatch(login({ token, username }));
         navigate('/');
       } catch (error) {
