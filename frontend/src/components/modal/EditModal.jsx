@@ -4,8 +4,7 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import leoProfanity from 'leo-profanity';
-import { toast } from 'react-toastify';
-import useValidationSchemas from '../../validation'
+import useValidationSchemas from '../../validation';
 import { useGetChannelsQuery, useEditChannelMutation } from '../../store/middlewares/index';
 
 const EditModal = ({
@@ -19,13 +18,13 @@ const EditModal = ({
   const { t } = useTranslation();
   const [editChannel] = useEditChannelMutation();
   const { modalShema } = useValidationSchemas();
-  
+
   const actualChannel = channels.find((channel) => channel.id === currentChannel);
   const channelsNames = channels.map((channel) => channel.name);
 
   const formik = useFormik({
     initialValues: {
-    channelName: actualChannel?.name || '',
+      channelName: actualChannel?.name || '',
     },
     validationSchema: modalShema(channelsNames),
     onSubmit: async (values, { resetForm }) => {
@@ -42,7 +41,7 @@ const EditModal = ({
         }
       } catch (err) {
         console.error('Failed to edit channel', err);
-        }
+      }
     },
     validateOnChange: false,
     validateOnBlur: false,
@@ -81,12 +80,15 @@ const EditModal = ({
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary"
-          onClick={close}>
-            {t('modal.cancel')}
+          onClick={close}
+        >
+          {t('modal.cancel')}
         </Button>
-        <Button variant="primary"
-          onClick={formik.handleSubmit}>
-            {t('modal.submit')}
+        <Button
+          variant="primary"
+          onClick={formik.handleSubmit}
+        >
+          {t('modal.submit')}
         </Button>
       </Modal.Footer>
     </>

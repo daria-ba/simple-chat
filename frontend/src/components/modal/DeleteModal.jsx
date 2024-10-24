@@ -10,7 +10,6 @@ const DeleteModal = ({
   const { t } = useTranslation();
 
   return (
-    <>
       <div className="modal-content">
         <Modal.Header>
           <Modal.Title>{t('channel.remove')}</Modal.Title>
@@ -24,7 +23,7 @@ const DeleteModal = ({
           <p className="lead">{t('modal.confirmation')}</p>
           <div className="d-flex justify-content-end">
             <Button variant="secondary" onClick={close}>
-                {t('modal.cancel')}
+              {t('modal.cancel')}
             </Button>
             <Button
               variant="danger"
@@ -36,7 +35,6 @@ const DeleteModal = ({
           </div>
         </Modal.Body>
       </div>
-    </>
   );
 };
 

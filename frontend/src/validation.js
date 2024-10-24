@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 const useValidationSchemas = () => {
   const { t } = useTranslation();
 
-const modalShema = (channelsNames) => Yup.object({
+  const modalShema = (channelsNames) => Yup.object({
     channelName: Yup.string()
       .min(3, `${t('validation.min_max')}`)
       .max(20, `${t('validation.min_max')}`)
@@ -35,12 +35,11 @@ const modalShema = (channelsNames) => Yup.object({
       ),
   });
 
-return {
-  modalShema,
-  authShema,
-  signupShema,
+  return {
+    modalShema,
+    authShema,
+    signupShema,
+  };
 };
-
-}
 
 export default useValidationSchemas;

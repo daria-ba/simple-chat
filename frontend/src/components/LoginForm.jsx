@@ -12,7 +12,7 @@ import {
   Col,
 } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import useValidationSchemas from '../validation.js'
+import useValidationSchemas from '../validation.js';
 import loginUser from '../api/api.js';
 import ChatNavbar from './chat/ChatNavbar.jsx';
 import loginImg from '../assets/img/login.jpeg';

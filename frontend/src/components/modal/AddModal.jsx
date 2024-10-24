@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import leoProfanity from 'leo-profanity';
-import useValidationSchemas from '../../validation'
+import useValidationSchemas from '../../validation';
 import { setActiveChannel } from '../../store/slices/chatSlice';
 import { useGetChannelsQuery, useAddChannelMutation } from '../../store/middlewares/index';
 
@@ -29,20 +29,20 @@ const AddModal = ({
     },
     validationSchema: modalShema(channelsNames),
     onSubmit: async (values, { resetForm }) => {
-    const newChannel = {
-      name: leoProfanity.clean(values.channelName),
-    };
-    try {
-      const data = await addChannel(newChannel).unwrap();
-      resetForm();
-      close();
-      if (data) {
-        dispatch(setActiveChannel(data.id));
+      const newChannel = {
+        name: leoProfanity.clean(values.channelName),
+      };
+      try {
+        const data = await addChannel(newChannel).unwrap();
+        resetForm();
+        close();
+        if (data) {
+          dispatch(setActiveChannel(data.id));
+        }
+        createNotify();
+      } catch (err) {
+        console.error('Failed to add channel', err);
       }
-      createNotify();
-    } catch (err) {
-      console.error('Failed to add channel', err);
-    }
     },
     validateOnChange: false,
     validateOnBlur: false,
@@ -86,13 +86,14 @@ const AddModal = ({
           </Button>
           <Button variant="primary"
             onClick={formik.handleSubmit}
-            className="ms-2">
-              {t('modal.submit')}
+            className="ms-2"
+          >
+            {t('modal.submit')}
           </Button>
         </div>
       </Modal.Footer>
     </>
-);
+  );
 };
 
 export default AddModal;

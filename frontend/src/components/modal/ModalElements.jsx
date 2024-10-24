@@ -15,9 +15,9 @@ const ModalElements = ({
   confirmDeleteChannel,
 }) => {
   const { t } = useTranslation();
-  
+
   const createNotify = () => {
-      toast.success(t(`channel.${type}`));
+    toast.success(t(`channel.${type}`));
   };
 
   const modalComponents = {
@@ -39,7 +39,7 @@ const ModalElements = ({
         close={close}
         createNotify={createNotify}
         currentChannel={currentChannel}
-        confirmDeleteChannel={confirmDeleteChannel} 
+        confirmDeleteChannel={confirmDeleteChannel}
       />
     </Modal>
   );
