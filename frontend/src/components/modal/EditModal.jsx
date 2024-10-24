@@ -63,6 +63,7 @@ const EditModal = ({
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
           <Form.Group controlId="channelName">
+            <Form.Label>{t('channel.editChannelName')}</Form.Label>
             <Form.Control
               type="text"
               placeholder={t('channel.newName')}
