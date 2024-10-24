@@ -24,7 +24,7 @@ const EditModal = ({
 
   const formik = useFormik({
     initialValues: {
-    channelName: actualChannel?.name,
+    channelName: actualChannel?.name || '',
     },
     validationSchema: modalShema(channelsNames),
     onSubmit: async (values, { resetForm }) => {
