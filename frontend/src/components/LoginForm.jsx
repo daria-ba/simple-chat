@@ -12,7 +12,7 @@ import {
   Col,
 } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import * as Yup from 'yup';
+import useValidationSchemas from '../validation.js'
 import loginUser from '../api/api.js';
 import ChatNavbar from './chat/ChatNavbar.jsx';
 import loginImg from '../assets/img/login.jpeg';
@@ -24,18 +24,14 @@ const LoginForm = () => {
   const dispatch = useDispatch();
   const [loginFailed, setLoginFailed] = useState(false);
   const inputRef = useRef(null);
-
-  const authSchema = Yup.object({
-    username: Yup.string().required(t('validation.required')),
-    password: Yup.string().required(t('validation.required')),
-  });
+  const { authShema } = useValidationSchemas();
 
   const formik = useFormik({
     initialValues: {
       username: '',
       password: '',
     },
-    validationSchema: authSchema,
+    validationSchema: authShema,
     onSubmit: async (values) => {
       try {
         const response = await loginUser({

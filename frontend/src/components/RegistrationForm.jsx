@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import * as Yup from 'yup';
 import axios from 'axios';
 import leoProfanity from 'leo-profanity';
 import { useFormik } from 'formik';
@@ -14,6 +13,7 @@ import {
   Col,
 } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import useValidationSchemas from '../validation';
 import ChatNavbar from './chat/ChatNavbar';
 import regImg from '../assets/img/signup.jpg';
 import { setAuthData } from '../store/slices/authSlice';
@@ -24,24 +24,25 @@ const RegistrationForm = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const inputRef = useRef(null);
+  const { signupShema } = useValidationSchemas();
 
-  const signupSchema = Yup.object().shape({
-    username: Yup.string()
-      .min(3, t('validation.min_max'))
-      .max(20, t('validation.min_max'))
-      .required(t('validation.required')),
-    password: Yup.string()
-      .min(6, t('validation.passwordCharacters'))
-      .required(t('validation.required')),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], t('validation.passwordMustMatch'))
-      .required(t('validation.required'))
-      .test(
-        'confirmPassword',
-        'validation.passwordMustMatch',
-        (value, context) => value === context.parent.password,
-      ),
-  });
+  // const signupSchema = Yup.object().shape({
+  //   username: Yup.string()
+  //     .min(3, t('validation.min_max'))
+  //     .max(20, t('validation.min_max'))
+  //     .required(t('validation.required')),
+  //   password: Yup.string()
+  //     .min(6, t('validation.passwordCharacters'))
+  //     .required(t('validation.required')),
+  //   confirmPassword: Yup.string()
+  //     .oneOf([Yup.ref('password'), null], t('validation.passwordMustMatch'))
+  //     .required(t('validation.required'))
+  //     .test(
+  //       'confirmPassword',
+  //       'validation.passwordMustMatch',
+  //       (value, context) => value === context.parent.password,
+  //     ),
+  // });
 
   const formik = useFormik({
     initialValues: {
@@ -49,7 +50,7 @@ const RegistrationForm = () => {
       password: '',
       confirmPassword: '',
     },
-    validationSchema: signupSchema,
+    validationSchema: signupShema,
     onSubmit: async (values) => {
       try {
         const response = await axios.post('/api/v1/signup', {
