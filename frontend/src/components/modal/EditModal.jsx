@@ -65,7 +65,7 @@ const EditModal = ({
             <Form.Label htmlFor="name" visuallyHidden>{t('channel.editChannelName')}</Form.Label>
             <Form.Control
               type="text"
-              placeholder={t('channel.new_name')}
+              placeholder={t('channel.newName')}
               name="channelName"
               ref={inputRef}
               value={formik.values.channelName}
