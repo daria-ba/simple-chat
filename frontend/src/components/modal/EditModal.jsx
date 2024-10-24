@@ -79,7 +79,8 @@ const EditModal = ({
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary"
+        <Button
+          variant="secondary"
           onClick={close}
         >
           {t('modal.cancel')}

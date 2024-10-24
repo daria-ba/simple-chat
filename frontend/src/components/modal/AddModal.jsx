@@ -25,7 +25,7 @@ const AddModal = ({
 
   const formik = useFormik({
     initialValues: {
-    channelName: '',
+      channelName: '',
     },
     validationSchema: modalShema(channelsNames),
     onSubmit: async (values, { resetForm }) => {
@@ -84,7 +84,8 @@ const AddModal = ({
           <Button variant="secondary" onClick={close}>
             {t('modal.cancel')}
           </Button>
-          <Button variant="primary"
+          <Button
+            variant="primary"
             onClick={formik.handleSubmit}
             className="ms-2"
           >
