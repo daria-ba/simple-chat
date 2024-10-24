@@ -12,6 +12,7 @@ const EditModal = ({
   show,
   close,
   currentChannel,
+  createNotify,
 }) => {
   const inputRef = useRef(null);
   const { data: channels } = useGetChannelsQuery();
@@ -37,7 +38,7 @@ const EditModal = ({
         resetForm();
         close();
         if (data) {
-          toast.success(`${t('channel.edit')}`);
+          createNotify();
         }
       } catch (err) {
         console.error('Failed to edit channel', err);
@@ -62,7 +63,6 @@ const EditModal = ({
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
           <Form.Group controlId="channelName">
-            <Form.Label htmlFor="name" visuallyHidden>{t('channel.editChannelName')}</Form.Label>
             <Form.Control
               type="text"
               placeholder={t('channel.newName')}
