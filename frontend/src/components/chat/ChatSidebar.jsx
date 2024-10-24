@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { fetchChannels, deleteChannel, setActiveChannel } from '../../store/slices/chatSlice';
 import { useGetChannelsQuery } from '../../store/middlewares/index';
-import ModalElements from './ModalElements';
+import ModalElements from '../modal/ModalElements';
 
 const ChatSidebar = () => {
   const dispatch = useDispatch();
@@ -48,7 +48,7 @@ const ChatSidebar = () => {
   };
 
   const handleOpenAddModal = () => {
-    setModalType('add');
+    setModalType('create');
   };
 
   const handleCloseModal = () => {
@@ -62,7 +62,7 @@ const ChatSidebar = () => {
   };
 
   const deleteNotify = () => {
-    toast.success(`${t('channel.removed')}`);
+    toast.success(`${t('channel.delete')}`);
   };
 
   const confirmDeleteChannel = () => {
@@ -145,7 +145,7 @@ const ChatSidebar = () => {
                     }}
                   >
                     <Dropdown.Item as="button" size="sm" onClick={() => handleOpenEditModal(channel.id)}>
-                      {t('channel.edit')}
+                      {t('channel.rename')}
                     </Dropdown.Item>
                     <Dropdown.Item as="button" size="sm" onClick={() => handleOpenDeleteModal(channel.id)}>
                       {t('channel.remove')}
