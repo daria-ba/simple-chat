@@ -1,13 +1,14 @@
 /* eslint-disable react/prop-types */
 import React, { useRef, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import leoProfanity from 'leo-profanity';
 import useValidationSchemas from '../../validation';
 import { setActiveChannel } from '../../store/slices/chatSlice';
 import { useGetChannelsQuery, useAddChannelMutation } from '../../store/middlewares/index';
+import { auth } from '../../store/slices/authSlice';
 
 const AddModal = ({
   show,
@@ -18,6 +19,7 @@ const AddModal = ({
   const dispatch = useDispatch();
   const { data: channels } = useGetChannelsQuery();
   const [addChannel] = useAddChannelMutation();
+  const currentUserId = useSelector((state) => state.auth.userId);
   const { t } = useTranslation();
   const { modalShema } = useValidationSchemas();
 
@@ -26,14 +28,20 @@ const AddModal = ({
   const formik = useFormik({
     initialValues: {
       channelName: '',
+      isPrivate: false,
     },
     validationSchema: modalShema(channelsNames),
     onSubmit: async (values, { resetForm }) => {
+      console.log('user id', currentUserId);
       const newChannel = {
+        created_by: currentUserId,
         name: leoProfanity.clean(values.channelName),
+        is_private: false,
+        // is_private: isPrivate,
       };
       try {
         const data = await addChannel(newChannel).unwrap();
+        console.log('addmodal', data);
         resetForm();
         close();
         if (data) {

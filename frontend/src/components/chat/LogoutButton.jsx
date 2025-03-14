@@ -12,7 +12,7 @@ const LogoutButton = () => {
 
   const handleLogout = () => {
     dispatch(clearAuthData());
-    navigate('/login');
+    navigate('/signin');
   };
 
   return (

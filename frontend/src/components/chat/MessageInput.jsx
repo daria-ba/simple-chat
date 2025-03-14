@@ -9,7 +9,8 @@ import { useAddMessageMutation } from '../../store/middlewares/index';
 const MessageInput = () => {
   const { t } = useTranslation();
   const { currentChannelId } = useSelector((state) => state.channels);
-  const username = useSelector((state) => state.auth.username);
+  const currentUserId = useSelector((state) => state.auth.userId);
+  const login = useSelector((state) => state.auth.login);
   const inputRef = useRef(null);
 
   const [addMessage, { isLoading }] = useAddMessageMutation();
@@ -20,13 +21,13 @@ const MessageInput = () => {
     },
     onSubmit: async (values, { resetForm }) => {
       const message = {
-        body: leoProfanity.clean(values.message),
-        username,
-        removable: true,
-        channelId: currentChannelId,
-        id: '',
+        content: leoProfanity.clean(values.message),
+        reply_to_id: null,
+        user_id: currentUserId,
+        channel_id: currentChannelId,
       };
-
+      console.log(message);
+      console.log('current id', currentUserId);
       try {
         await addMessage(message);
         resetForm();

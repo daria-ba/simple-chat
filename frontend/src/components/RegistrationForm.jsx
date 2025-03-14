@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import axios from 'axios';
 import leoProfanity from 'leo-profanity';
 import { useFormik } from 'formik';
 import {
@@ -17,48 +16,35 @@ import useValidationSchemas from '../validation';
 import ChatNavbar from './chat/ChatNavbar';
 import regImg from '../assets/img/signup.jpg';
 import { setAuthData } from '../store/slices/authSlice';
+import { useSignupMutation } from '../store/middlewares/index';
 
 const RegistrationForm = () => {
   const [registrationFailed, setRegistrationFailed] = useState(false);
+  const [ signup ] = useSignupMutation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const inputRef = useRef(null);
   const { signupShema } = useValidationSchemas();
 
-  // const signupSchema = Yup.object().shape({
-  //   username: Yup.string()
-  //     .min(3, t('validation.min_max'))
-  //     .max(20, t('validation.min_max'))
-  //     .required(t('validation.required')),
-  //   password: Yup.string()
-  //     .min(6, t('validation.passwordCharacters'))
-  //     .required(t('validation.required')),
-  //   confirmPassword: Yup.string()
-  //     .oneOf([Yup.ref('password'), null], t('validation.passwordMustMatch'))
-  //     .required(t('validation.required'))
-  //     .test(
-  //       'confirmPassword',
-  //       'validation.passwordMustMatch',
-  //       (value, context) => value === context.parent.password,
-  //     ),
-  // });
-
   const formik = useFormik({
     initialValues: {
-      username: '',
+      login: '',
       password: '',
       confirmPassword: '',
     },
     validationSchema: signupShema,
-    onSubmit: async (values) => {
+    onSubmit: async (values, { setSubmitting }) => {
+      setRegistrationFailed(false);
+
       try {
-        const response = await axios.post('/api/v1/signup', {
-          username: leoProfanity.clean(values.username),
+        const response = await signup({
+          login: leoProfanity.clean(values.login),
           password: values.password,
-        });
-        const { token, username } = response.data;
-        dispatch(setAuthData({ token, username }));
+        })
+        console.log(response.data);
+        const { token, login } = response.data;
+        dispatch(setAuthData({ token, login }));
         navigate('/');
       } catch (error) {
         console.error('Ошибка регистрации', error);
@@ -96,19 +82,19 @@ const RegistrationForm = () => {
                     <Form.Group className="form-floating mb-3">
                       <Form.Control
                         type="text"
-                        name="username"
-                        id="username"
-                        placeholder={t('signupPage.usernamePlaceholder')}
-                        autoComplete="username"
+                        name="login"
+                        id="login"
+                        placeholder={t('signupPage.loginPlaceholder')}
+                        autoComplete="login"
                         ref={inputRef}
-                        value={formik.values.username}
+                        value={formik.values.login}
                         onChange={formik.handleChange}
-                        isInvalid={formik.errors.username || registrationFailed}
+                        isInvalid={formik.errors.login || registrationFailed}
                       />
-                      <Form.Label htmlFor="username">{t('signupPage.username')}</Form.Label>
+                      <Form.Label htmlFor="login">{t('signupPage.login')}</Form.Label>
                       {!registrationFailed && (
                         <Form.Control.Feedback type="invalid" tooltip placement="right">
-                          {formik.errors.username && t(formik.errors.username)}
+                          {formik.errors.login && t(formik.errors.login)}
                         </Form.Control.Feedback>
                       )}
                     </Form.Group>
