@@ -8,7 +8,7 @@ const chatSlice = createSlice({
     channels: [],
     isLoading: false,
     error: null,
-    currentChannelId: '1',
+    currentChannelId: 1,
   },
   reducers: {
     getChannelsStart: (state) => {
@@ -43,7 +43,7 @@ const chatSlice = createSlice({
       const channelIdToDelete = action.payload;
       state.channels = state.channels.filter((channel) => channel.id !== channelIdToDelete);
       if (state.currentChannelId === channelIdToDelete) {
-        state.currentChannelId = '1';
+        state.currentChannelId = 1;
       }
     },
     setActiveChannel: (state, action) => {
@@ -103,15 +103,16 @@ export const editChannel = (editedChannel) => async (dispatch) => {
   }
 };
 
-export const deleteChannel = (channelId) => async (dispatch) => {
-  try {
-    const user = localStorage.getItem('user');
-    const token = JSON.parse(user)?.token;
-    await axios.delete(`/api/v1/channels/${channelId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    dispatch(deleteChannelSuccess(channelId));
-  } catch (error) {
-    console.error('Ошибка удаления канала', error);
-  }
-};
+// export const deleteChannel = (channelId) => async (dispatch) => {
+//   try {
+//     const user = localStorage.getItem('user');
+//     const token = JSON.parse(user)?.token;
+//     console.log('deleteChannel', channelId);
+//     await axios.delete(`/api/channels/${channelId}`, {
+//       headers: { Authorization: `Bearer ${token}` },
+//     });
+//     dispatch(deleteChannelSuccess(channelId));
+//   } catch (error) {
+//     console.error('Ошибка удаления канала', error);
+//   }
+// };

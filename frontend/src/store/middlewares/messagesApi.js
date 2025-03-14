@@ -3,9 +3,9 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 const messagesApi = createApi({
   reducerPath: 'messageApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api/v1/messages',
+    baseUrl: `${process.env.REACT_APP_API_URL}/api`,
     prepareHeaders: (headers, { getState }) => {
-      const { token } = getState().auth;
+      const { token } = getState().auth?.token;
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);
       }
@@ -15,22 +15,24 @@ const messagesApi = createApi({
   tagTypes: ['Messages'],
   endpoints: (builder) => ({
     getMessages: builder.query({
-      query: () => '',
+      query: (channel_id) => `messages/${channel_id}`,
       providesTags: ['Messages'],
     }),
     addMessage: builder.mutation({
       query: (params) => ({
+        url: 'messages',
         method: 'POST',
         body: params,
       }),
-      invalidatesTags: ({ channelId }) => [{ type: 'Messages', id: channelId }],
+      invalidatesTags: ['Messages'],
+      // invalidatesTags: ({ channelId }) => [{ type: 'Messages', id: channelId }],
     }),
-    deleteMessage: builder.mutation({
-      query: ({ channelId, messageId }) => ({
-        url: `channels/${channelId}/messages/${messageId}`,
+    removeMessage: builder.mutation({
+      query: ({ messageId, userId }) => ({
+        url: `messages/${messageId}/${userId}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ({ channelId }) => [{ type: 'Messages', id: channelId }],
+      invalidatesTags: ['Messages'],
     }),
   }),
 });

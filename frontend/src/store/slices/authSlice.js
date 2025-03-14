@@ -4,39 +4,48 @@ import { createSlice } from '@reduxjs/toolkit';
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
+    // userID: 
     token: (() => {
       const user = localStorage.getItem('user');
       return JSON.parse(user)?.token || null;
     })(),
-    username: (() => {
+    login: (() => {
       const user = localStorage.getItem('user');
-      return JSON.parse(user)?.username || '';
+      return JSON.parse(user)?.login || '';
     })(),
+    userId: (() => {
+      const user = localStorage.getItem('user');
+      return JSON.parse(user)?.userId || '';
+    })(),
+
     isAuthenticated: !!JSON.parse(localStorage.getItem('user'))?.token,
   },
   reducers: {
-    login(state, action) {
-      const { token, username } = action.payload;
+    auth(state, action) {
+      const { token, login, userId } = action.payload;
+      state.userId = userId;
       state.token = token;
-      state.username = username;
+      state.login = login;
       state.isAuthenticated = true;
-      localStorage.setItem('user', JSON.stringify({ token, username }));
+      localStorage.setItem('user', JSON.stringify({ token, login, userId }));
     },
     clearAuthData(state) {
+      state.userId = null;
       state.token = null;
-      state.username = '';
+      state.login = '';
       state.isAuthenticated = false;
       localStorage.removeItem('user');
     },
     setAuthData(state, action) {
-      const { token, username } = action.payload;
+      const { token, login, userId } = action.payload;
+      state.userId = userId;
       state.token = token;
-      state.username = username;
+      state.login = login;
       state.isAuthenticated = true;
-      localStorage.setItem('user', JSON.stringify({ token, username }));
+      localStorage.setItem('user', JSON.stringify({ token, login, userId }));
     },
   },
 });
 
-export const { login, clearAuthData, setAuthData } = authSlice.actions;
+export const { auth, clearAuthData, setAuthData } = authSlice.actions;
 export default authSlice.reducer;

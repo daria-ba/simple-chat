@@ -13,12 +13,12 @@ const useValidationSchemas = () => {
   });
 
   const authShema = Yup.object({
-    username: Yup.string().required(t('validation.required')),
+    login: Yup.string().required(t('validation.required')),
     password: Yup.string().required(t('validation.required')),
   });
 
   const signupShema = Yup.object().shape({
-    username: Yup.string()
+    login: Yup.string()
       .min(3, t('validation.min_max'))
       .max(20, t('validation.min_max'))
       .required(t('validation.required')),

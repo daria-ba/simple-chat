@@ -13,10 +13,11 @@ import {
 } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import useValidationSchemas from '../validation.js';
-import loginUser from '../api/api.js';
 import ChatNavbar from './chat/ChatNavbar.jsx';
 import loginImg from '../assets/img/login.jpeg';
-import { login } from '../store/slices/authSlice';
+import { useLoginUserMutation } from '../store/middlewares/index.js';
+import { auth } from '../store/slices/authSlice';
+
 
 const LoginForm = () => {
   const { t } = useTranslation();
@@ -24,22 +25,25 @@ const LoginForm = () => {
   const dispatch = useDispatch();
   const [loginFailed, setLoginFailed] = useState(false);
   const inputRef = useRef(null);
+  const [ loginUser ] = useLoginUserMutation();
   const { authShema } = useValidationSchemas();
 
   const formik = useFormik({
     initialValues: {
-      username: '',
+      login: '',
       password: '',
     },
-    validationSchema: authShema,
+    validationSchema: null,
     onSubmit: async (values) => {
+      console.log('Форма отправлена! Данные:', values);
       try {
         const response = await loginUser({
-          username: values.username,
+          login: values.login,
           password: values.password,
         });
-        const { token, username } = response;
-        dispatch(login({ token, username }));
+        console.log('response', response);
+        const { token, login, userId } = response.data;
+        dispatch(auth({ token, login, userId }));
         navigate('/');
       } catch (error) {
         console.error('Ошибка входа', error);
@@ -76,16 +80,16 @@ const LoginForm = () => {
                     <Form.Group className="form-floating mb-3">
                       <Form.Control
                         type="text"
-                        name="username"
-                        id="username"
-                        placeholder={t('loginPage.username')}
-                        autoComplete="username"
+                        name="login"
+                        id="login"
+                        placeholder={t('loginPage.login')}
+                        autoComplete="login"
                         ref={inputRef}
-                        value={formik.values.username}
+                        value={formik.values.login}
                         onChange={formik.handleChange}
                         isInvalid={loginFailed}
                       />
-                      <Form.Label htmlFor="username">{t('loginPage.username')}</Form.Label>
+                      <Form.Label htmlFor="login">{t('loginPage.login')}</Form.Label>
                       {!loginFailed && (
                         <Form.Control.Feedback type="invalid" tooltip>
                           {t('loginPage.loginFailed')}
@@ -111,9 +115,10 @@ const LoginForm = () => {
                       )}
                     </Form.Group>
                     <Button
+                      type="submit"
                       className="w-100 mb-3"
                       variant="outline-secondary"
-                      type="submit"
+                      onClick={() => console.log('Клик по кнопке!')}
                     >
                       {t('loginPage.submitBtn')}
                     </Button>
@@ -123,7 +128,7 @@ const LoginForm = () => {
 
               <Card.Footer className="p-4">
                 <div className="text-center">
-                  <span>{t('loginPage.noAccount')}</span>
+                  <span>{t('loginPage.noAccount')} </span>
                   <Link to="/signup">{t('loginPage.signup')}</Link>
                 </div>
               </Card.Footer>

@@ -1,5 +1,11 @@
 import channelsApi from './channelsApi.js';
 import messagesApi from './messagesApi.js';
+import authApi from './authApi.js';
+
+export const {
+  useLoginUserMutation,
+  useSignupMutation,
+} = authApi
 
 export const {
   useGetChannelsQuery,

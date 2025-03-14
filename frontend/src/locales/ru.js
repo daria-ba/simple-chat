@@ -10,7 +10,7 @@ const ru = {
     },
     loginPage: {
       heading: 'Войти',
-      username: 'Ваш ник',
+      login: 'Ваш ник',
       password: 'Пароль',
       submitBtn: 'Войти',
       signup: 'Регистрация',
@@ -63,8 +63,8 @@ const ru = {
     },
     signupPage: {
       heading: 'Регистрация',
-      usernamePlaceholder: 'От 3 до 20 символов',
-      username: 'Имя пользователя',
+      loginPlaceholder: 'От 3 до 20 символов',
+      login: 'Имя пользователя',
       password: 'Пароль',
       passwordPlaceholder: 'Не менее 6 символов',
       mustMatch: 'Пароли должны совпадать',

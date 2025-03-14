@@ -3,8 +3,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Button, Dropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { fetchChannels, deleteChannel, setActiveChannel } from '../../store/slices/chatSlice';
-import { useGetChannelsQuery } from '../../store/middlewares/index';
+import { fetchChannels, deleteChannelSuccess, setActiveChannel } from '../../store/slices/chatSlice';
+import { useGetChannelsQuery, useRemoveChannelMutation } from '../../store/middlewares/index';
 import ModalElements from '../modal/ModalElements';
 
 const ChatSidebar = () => {
@@ -12,11 +12,16 @@ const ChatSidebar = () => {
   const { t } = useTranslation();
   const [showDropdown, setShowDropdown] = useState(null);
   const [channelToDelete, setChannelToDelete] = useState(null);
+  const [channelToAdd, setChannelToAdd] = useState(null);
   const { data: channels, isLoading } = useGetChannelsQuery();
   const { currentChannelId } = useSelector((state) => state.channels);
   const dropdownRef = useRef(null);
   const [currentChannel, setCurrentChannel] = useState(null);
   const [modalType, setModalType] = useState(null);
+  const [ removeChannel ] = useRemoveChannelMutation();
+
+  // const channelMap = channels.filter((channel) => channel.id)
+  // console.log('current channel', channels)
 
   useEffect(() => {
     if (!isLoading && channels === undefined) {
@@ -39,10 +44,12 @@ const ChatSidebar = () => {
 
   const handleOpenDeleteModal = (channelId) => {
     setChannelToDelete(channelId);
+    console.log('channel to delete', channelToDelete);
     setModalType('delete');
   };
 
   const handleOpenEditModal = (channel) => {
+    setChannelToAdd(channel);
     setCurrentChannel(channel);
     setModalType('edit');
   };
@@ -65,12 +72,16 @@ const ChatSidebar = () => {
     toast.success(`${t('channel.delete')}`);
   };
 
-  const confirmDeleteChannel = () => {
-    if (channelToDelete) {
-      dispatch(deleteChannel(channelToDelete));
-      handleCloseModal();
-      deleteNotify();
-    }
+  const confirmDeleteChannel = async () => {
+      try {
+        console.log('delete', channelToDelete)
+        await removeChannel(channelToDelete).unwrap();
+        deleteChannelSuccess(channelToDelete)
+        handleCloseModal();
+        deleteNotify();
+      } catch (err) {
+        console.error("Ошибка удаления:", err);
+      }
   };
 
   if (isLoading) return <div>Loading channels...</div>;
@@ -117,7 +128,7 @@ const ChatSidebar = () => {
                   <span className="me-1">#</span>
                   {channel.name}
                 </Button>
-                {channel.removable && (
+                {channel.is_removable && (
                   <Button
                     type="button"
                     className="flex-grow-0 dropdown-toggle dropdown-toggle-split"
@@ -132,7 +143,7 @@ const ChatSidebar = () => {
                   </Button>
                 )}
               </div>
-              {channel.removable && showDropdown === channel.id && (
+              {channel.is_removable && showDropdown === channel.id && (
                 <div style={{ position: 'relative' }}>
                   <Dropdown
                     show={showDropdown === channel.id}
