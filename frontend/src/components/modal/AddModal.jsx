@@ -32,7 +32,6 @@ const AddModal = ({
     },
     validationSchema: modalShema(channelsNames),
     onSubmit: async (values, { resetForm }) => {
-      console.log('user id', currentUserId);
       const newChannel = {
         created_by: currentUserId,
         name: leoProfanity.clean(values.channelName),
@@ -41,7 +40,6 @@ const AddModal = ({
       };
       try {
         const data = await addChannel(newChannel).unwrap();
-        console.log('addmodal', data);
         resetForm();
         close();
         if (data) {

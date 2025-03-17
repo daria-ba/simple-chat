@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useGetChannelsQuery, useGetMessagesQuery, useRemoveMessageMutation } from '../../store/middlewares/index';
-import MessageInput from './MessageInput';
 import { Button } from 'react-bootstrap';
 import { DateTime } from "luxon";
+import ContextMenu from './ContextMenu';
 
 const ChatMessages = () => {
   const { currentChannelId } = useSelector((state) => state.channels);
@@ -25,10 +25,8 @@ const ChatMessages = () => {
   const channel = channels?.find(({ id }) => id === currentChannelId);
 
   const handleRemoveMessage = async (messageId, userId) => {
-    console.log('message to delete', messageId)
-    console.log('user id', userId)
       try {
-        await removeMessage({ messageId, userId }).unwrap(); // Отправка запроса + обработка ошибок
+        await removeMessage({ messageId, userId }).unwrap();
         console.log("Message удалён");
       } catch (err) {
         console.error("Ошибка удаления:", err);
@@ -55,8 +53,9 @@ const ChatMessages = () => {
             {message.content} <br />
             <small style={{ textAlign: "right", display: "block" }}>at {localTime}</small>
             {message.user_id === userId ? 
+              // <ContextMenu />
             <Button
-            className='bg-transparent border-none text-xs p-1 text-black'
+            className='bg-transparent border-black text-xs p-1 text-black'
             onClick={() => handleRemoveMessage(message.id, userId)}
             >
               Удалить
@@ -65,9 +64,6 @@ const ChatMessages = () => {
           </div>
         );
         })}
-      </div>
-      <div className="mt-auto px-5 py-3">
-        <MessageInput />
       </div>
     </div>
   );

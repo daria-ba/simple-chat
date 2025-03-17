@@ -1,18 +1,19 @@
 import React, { useState } from "react";
+import { Button } from "react-bootstrap";
 
 const ContextMenu = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
   const handleContextMenu = (event) => {
-    event.preventDefault(); // Отменяем стандартное контекстное меню
+    event.preventDefault();
 
-    setPosition({ x: event.clientX, y: event.clientY }); // Устанавливаем позицию меню
+    setPosition({ x: event.clientX, y: event.clientY });
     setMenuVisible(true);
   };
 
   const handleClickOutside = () => {
-    setMenuVisible(false); // Закрываем меню при клике вне его
+    setMenuVisible(false);
   };
 
   return (
@@ -36,7 +37,12 @@ const ContextMenu = () => {
             boxShadow: "0px 0px 5px rgba(0,0,0,0.2)"
           }}
         >
-          <li style={{ padding: "5px", cursor: "pointer" }}>Опция 1</li>
+          <li style={{ padding: "5px", cursor: "pointer" }}>            <Button
+            className='bg-transparent border-black text-xs p-1 text-black'
+            onClick={() => handleRemoveMessage(message.id, userId)}
+            >
+              Удалить
+            </Button></li>
           <li style={{ padding: "5px", cursor: "pointer" }}>Опция 2</li>
           <li style={{ padding: "5px", cursor: "pointer" }}>Опция 3</li>
         </ul>

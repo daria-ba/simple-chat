@@ -20,9 +20,6 @@ const ChatSidebar = () => {
   const [modalType, setModalType] = useState(null);
   const [ removeChannel ] = useRemoveChannelMutation();
 
-  // const channelMap = channels.filter((channel) => channel.id)
-  // console.log('current channel', channels)
-
   useEffect(() => {
     if (!isLoading && channels === undefined) {
       dispatch(fetchChannels());
@@ -44,7 +41,6 @@ const ChatSidebar = () => {
 
   const handleOpenDeleteModal = (channelId) => {
     setChannelToDelete(channelId);
-    console.log('channel to delete', channelToDelete);
     setModalType('delete');
   };
 
@@ -74,7 +70,6 @@ const ChatSidebar = () => {
 
   const confirmDeleteChannel = async () => {
       try {
-        console.log('delete', channelToDelete)
         await removeChannel(channelToDelete).unwrap();
         deleteChannelSuccess(channelToDelete)
         handleCloseModal();
