@@ -34,7 +34,7 @@ const RegistrationForm = () => {
       confirmPassword: '',
     },
     validationSchema: signupShema,
-    onSubmit: async (values, { setSubmitting }) => {
+    onSubmit: async (values) => {
       setRegistrationFailed(false);
 
       try {

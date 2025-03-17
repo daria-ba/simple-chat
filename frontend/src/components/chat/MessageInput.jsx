@@ -10,7 +10,6 @@ const MessageInput = () => {
   const { t } = useTranslation();
   const { currentChannelId } = useSelector((state) => state.channels);
   const currentUserId = useSelector((state) => state.auth.userId);
-  const login = useSelector((state) => state.auth.login);
   const inputRef = useRef(null);
 
   const [addMessage, { isLoading }] = useAddMessageMutation();
@@ -26,8 +25,6 @@ const MessageInput = () => {
         user_id: currentUserId,
         channel_id: currentChannelId,
       };
-      console.log(message);
-      console.log('current id', currentUserId);
       try {
         await addMessage(message);
         resetForm();

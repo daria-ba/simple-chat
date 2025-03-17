@@ -35,13 +35,11 @@ const LoginForm = () => {
     },
     validationSchema: null,
     onSubmit: async (values) => {
-      console.log('Форма отправлена! Данные:', values);
       try {
         const response = await loginUser({
           login: values.login,
           password: values.password,
         });
-        console.log('response', response);
         const { token, login, userId } = response.data;
         dispatch(auth({ token, login, userId }));
         navigate('/');
@@ -118,7 +116,6 @@ const LoginForm = () => {
                       type="submit"
                       className="w-100 mb-3"
                       variant="outline-secondary"
-                      onClick={() => console.log('Клик по кнопке!')}
                     >
                       {t('loginPage.submitBtn')}
                     </Button>

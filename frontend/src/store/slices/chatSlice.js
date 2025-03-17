@@ -102,17 +102,3 @@ export const editChannel = (editedChannel) => async (dispatch) => {
     console.error('Ошибка изменения канала', error);
   }
 };
-
-// export const deleteChannel = (channelId) => async (dispatch) => {
-//   try {
-//     const user = localStorage.getItem('user');
-//     const token = JSON.parse(user)?.token;
-//     console.log('deleteChannel', channelId);
-//     await axios.delete(`/api/channels/${channelId}`, {
-//       headers: { Authorization: `Bearer ${token}` },
-//     });
-//     dispatch(deleteChannelSuccess(channelId));
-//   } catch (error) {
-//     console.error('Ошибка удаления канала', error);
-//   }
-// };
